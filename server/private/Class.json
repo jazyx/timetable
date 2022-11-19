@@ -1,0 +1,18 @@
+[ {
+    "contract_id":     "",
+    "students":        [
+      "",
+      ""
+    ],
+    "colour":          "",
+    "zoom":            "",
+    "location":        "",
+    "travelling_time": 0,
+    "regularity":      "regular",
+    "scheduled": [
+      "template_lesson",
+      "template_lesson"
+    ],
+    "proposal":        false
+  }
+]

@@ -1,0 +1,14 @@
+[ { 
+    "class_id":    "",
+    "date":        "",
+    "day":         "",
+    "start_time":  "8:30",
+    "end_time":    "9:30",
+    "index":       1,
+    "tentative":   false,
+    "supplement":  false,
+    "forfeited":   false,
+    "unscheduled": false,
+    "billed":      false
+  }
+]

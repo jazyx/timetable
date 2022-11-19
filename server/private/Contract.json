@@ -1,0 +1,73 @@
+[ {
+    "school_id":      "Prolangue",
+    "teacher_id":     "James",
+    "company_id":     "Leroy Merlin",
+    "name":           "Leroy",
+    "pay_rate":       2000,
+    "school_colour":  "#900",
+    "teacher_colour": "#090",
+    "duration":       60,
+    "forfeit_time":   18.00,
+    "start_date":     "2022-11-11"
+  },
+  {
+    "school_id":      "Prolangue",
+    "teacher_id":     "James",
+    "company_id":     "Coca-Cola",
+    "name":           "Coca-Cola",
+    "pay_rate":       2000,
+    "school_colour":  "#900",
+    "teacher_colour": "#900",
+    "duration":       60,
+    "forfeit_time":   18.00,
+    "start_date":     "2022-11-11"
+  },
+  {
+    "school_id":      "Prolangue",
+    "teacher_id":     "James",
+    "company_id":     "Lactalis",
+    "name":           "Lactalis",
+    "pay_rate":       1667,
+    "school_colour":  "#900",
+    "teacher_colour": "#909",
+    "duration":       50,
+    "forfeit_time":   18.00,
+    "start_date":     "2022-11-11"
+  },
+  {
+    "school_id":      "Edulife",
+    "teacher_id":     "James",
+    "company_id":     "Алекс",
+    "name":           "Edulife",
+    "pay_rate":       1500,
+    "school_colour":  "#900",
+    "teacher_colour": "#099",
+    "duration":       45,
+    "forfeit_time":   0,
+    "start_date":     "2022-11-11"
+  },
+  {
+    "school_id":      "Freelance",
+    "teacher_id":     "James",
+    "company_id":     "Вадим",
+    "name":           "Вадим",
+    "pay_rate":       2000,
+    "school_colour":  "#900",
+    "teacher_colour": "#009",
+    "duration":       60,
+    "forfeit_time":   0,
+    "start_date":     "2022-11-11"
+  },
+  {
+    "school_id":      "Freelance",
+    "teacher_id":     "James",
+    "company_id":     "Twins",
+    "name":           "Twins",
+    "pay_rate":       1250,
+    "school_colour":  "#900",
+    "teacher_colour": "#009",
+    "duration":       40,
+    "forfeit_time":   0,
+    "start_date":     "2022-11-11"
+  }
+]

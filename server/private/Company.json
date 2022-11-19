@@ -1,0 +1,13 @@
+[ {
+    "name": "Leroy Merlin",
+    "billing_rate": 2800
+  },
+  {
+    "name": "Coca-Cola",
+    "billing_rate": 2800
+  },
+  {
+    "name": "Lactalis",
+    "billing_rate": 2800
+  }
+]
