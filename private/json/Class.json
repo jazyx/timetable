@@ -1,18 +1,34 @@
-[ {
-    "contract_id":     "",
-    "students":        [
-      "",
-      ""
+[
+  {
+    "contract_id": "6dHpTJMSjejzne6XA",
+    "start_date": "2022-11-11",
+    "end_date": "",
+    "students": [
+      "2Xqsfrt87wZot3HS2",
+      "Q7oSp7DFHFuDsBkK3",
+      "X7TDjdL58meSbYWBy",
+      "QdhXdkudc6WQqtJQC",
+      "rq2EmMhYzus6LDPRJ",
+      "dXbCzaaFEoeGdMn9i",
+      "qio9kPHsgWAocJKB5",
+      "CWdhHkJTHvzuyFwKw",
+      "Q3agbpxRQsBKfzbXT",
+      "n3vBJi4DXgcncmzqj",
+      "4WpxLsowbc9KXozBk",
+      "49BiPfHMZYWGRfTdL",
+      "eMpEKSqMeKRbJxztM",
+      "cdgMbLxvF83c5P4Mn"
     ],
-    "colour":          "",
-    "zoom":            "",
-    "location":        "",
+    "colour": "#909",
+    "zoom": "https://us02web.zoom.us/j/86058212509?pwd=QUV1N3U1RlB3bUpMT29WSDVFRk9PZz09",
+    "location": "",
     "travelling_time": 0,
-    "regularity":      "regular",
+    "regularity": "regular",
     "scheduled": [
-      "template_lesson",
-      "template_lesson"
+      "o893kkcLdu2k4WJAj",
+      "C3jRYE8B44iGSyXSr"
     ],
-    "proposal":        false
+    "proposal": false,
+    "_id": "dLGaj7bYjwfs6K6Z5"
   }
 ]

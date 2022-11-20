@@ -1,14 +1,28 @@
-[ { 
-    "class_id":    "",
-    "date":        "",
-    "day":         "",
-    "start_time":  "8:30",
-    "end_time":    "9:30",
-    "index":       1,
-    "tentative":   false,
-    "supplement":  false,
-    "forfeited":   false,
+[
+  {
+    "date": "",
+    "day": 1,
+    "lesson_begin": 17,
+    "lesson_end": 17.5,
+    "index": 1,
+    "tentative": false,
+    "supplement": false,
+    "forfeited": false,
     "unscheduled": false,
-    "billed":      false
+    "billed": false,
+    "_id": "o893kkcLdu2k4WJAj"
+  },
+  {
+    "date": "",
+    "day": 4,
+    "lesson_begin": 17.2,
+    "lesson_end": 18.1,
+    "index": 2,
+    "tentative": false,
+    "supplement": false,
+    "forfeited": false,
+    "unscheduled": false,
+    "billed": false,
+    "_id": "C3jRYE8B44iGSyXSr"
   }
 ]

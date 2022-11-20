@@ -15,7 +15,11 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTracker } from 'meteor/react-meteor-data'
 import styled from "styled-components"
+
+import { TeacherTracker } from './TeacherTracker'
+
 
 
 const StyledWeek = styled.div`
@@ -66,34 +70,35 @@ const StyledTime = styled.div`
 `
 
 export const Teacher = () => {
-  const { teacher_id } = useParams()
+  const { teacher_name } = useParams()
 
   // <<< Simulated tracker data
-  const start_time = [7, 6] // 7 a.m. + 6 * 5 min = 7:30
-  const end_time   = [20,3]
-  const weekdays = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun"
-  ]
-  // Simulated tracker data >>>
-  
-  const hourLine = (12 - (start_time[1] || 12))
 
-  const rows = (end_time[0] - start_time[0]) * 12
-             - (start_time[1] || 0)
-             + (end_time[1] || 0)
+  const {
+    day_begin,
+    day_end,
+    weekdays,
+    lessons,
+    error
+  } = useTracker(() => TeacherTracker(teacher_name))
+  // Simulated tracker data >>>
+
+  if (error) {
+    return <h1>{error}</h1>
+  }
+  
+  const hourLine = (12 - (day_begin[1] || 12))
+
+  const rows = (day_end[0] - day_begin[0]) * 12
+             - (day_begin[1] || 0)
+             + (day_end[1] || 0)
 
   const grid = weekdays.reduce(buildGrid, [])
 
 
   return (
     <>
-      <h1>Teacher {teacher_id}</h1>
+      <h1>Teacher {teacher_name}</h1>
       <StyledWeek
         hourLine={hourLine}
         rows={rows}
@@ -106,7 +111,7 @@ export const Teacher = () => {
   
   function buildGrid(week, day, dayIndex) {
     const useStart = !hourLine
-    let hour = start_time[0] + !useStart
+    let hour = day_begin[0] + !useStart
     const timeCol = (dayIndex + 1) % 3
     
     const lines = new Array(rows + 1).fill(0).map((_, index) => {

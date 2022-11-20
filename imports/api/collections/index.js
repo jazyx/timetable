@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
+export const L10n        = new Mongo.Collection("l10n");
 export const School      = new Mongo.Collection("school");
 export const Company     = new Mongo.Collection("company");
 export const Teacher     = new Mongo.Collection("teacher");

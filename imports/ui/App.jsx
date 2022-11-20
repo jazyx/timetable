@@ -16,7 +16,7 @@ import { Company }  from './components/Company.jsx';
 import { School }   from './components/School.jsx';
 import { Observer } from './components/Observer.jsx';
 import { Student }  from './components/Student.jsx';
-import { Teacher }  from './components/Teacher.jsx';
+import { Teacher }  from './components/Teacher/Teacher.jsx';
 import { NotFound }  from './components/NotFound.jsx';
 
 export const App = () => {
@@ -58,7 +58,7 @@ export const App = () => {
               />
             </Route>
 
-            <Route path="t/:teacher_id/*" element={<Teacher />} />
+            <Route path="t/:teacher_name/*" element={<Teacher />} />
 
             <Route path="/not-found/*" element={<NotFound />} />     
           </Route>
