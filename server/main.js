@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import collections from '/imports/api/collections';
 
+// Run init.js as a side-effect
+import './init.js'
+
 // const {
 //   Company
 // } = collections

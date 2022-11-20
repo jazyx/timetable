@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Leroy Merlin",
+    "billing_rate": 2800,
+    "_id": "gxM6tr7KmTpLKS5ty"
+  },
+  {
+    "name": "Coca-Cola",
+    "billing_rate": 2800,
+    "_id": "vK95JX3XCj27Me5bv"
+  },
+  {
+    "name": "Lactalis",
+    "billing_rate": 2800,
+    "_id": "orm9PaGh87JGeuYux"
+  }
+]
