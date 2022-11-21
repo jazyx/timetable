@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from "styled-components"
+import { translucify } from '/imports/tools/utilities.js'
+
 
 const StyledSession = styled.div`
   position: absolute;
@@ -11,10 +13,14 @@ const StyledSession = styled.div`
   border: none;
   background-color: ${props => (
     props.unscheduled
-    ? "#ddd"
+    ? translucify(props.bg_colour, 0.33)
     : props.bg_colour
   )};
-  color: #fff;
+  color: ${props => (
+    props.unscheduled
+    ? translucify(props.bg_colour, 0.5)
+    : "inherit"
+  )};;
 `
 
 export const Session = (props) => {

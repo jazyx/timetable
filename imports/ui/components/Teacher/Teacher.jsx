@@ -17,21 +17,22 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data'
 
-import { Grid } from '../Timetable/Grid'
 import { TeacherTracker } from './TeacherTracker'
+import { TeacherToolbar, ToolBar } from './TeacherToolbar'
+import { Grid } from '../Timetable/Grid'
 
 
 export const Teacher = () => {
   const { teacher_name } = useParams()
 
-  // <<< Simulated tracker data
 
   const props = useTracker(() => TeacherTracker(teacher_name))
   // {
   //   day_begin,
   //   day_end,
-  //   weekdays=[],
+  //   weekdays,
   //   sessions,
+  //   OR
   //   error
   // }
   if (!props.weekdays) {
@@ -41,7 +42,9 @@ export const Teacher = () => {
 
   return (
     <>
-      <h1>Teacher {teacher_name}</h1>
+      <TeacherToolbar
+        teacher_name={teacher_name}
+      />
       <Grid
         {...props}
       />
