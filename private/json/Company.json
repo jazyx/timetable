@@ -28,5 +28,10 @@
     "name": "Twins",
     "billing_rate": 2800,
     "_id": "NSX5cDXXKhhYPMt2c"
+  },
+  {
+    "name": "DCI",
+    "billing_rate": 0,
+    "_id": "KcCSmcLW3tyedp6P3"
   }
 ]

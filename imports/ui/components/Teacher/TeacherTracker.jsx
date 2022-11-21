@@ -7,7 +7,7 @@
   Teacher,
   Contract,
   Class,
-  Lesson,
+  Session,
   L10n
 } = collections
  
@@ -51,7 +51,7 @@
     if ( l10n && l10n.d ) {
       return l10n.d
   
-    } else { // use English by default
+    } else { // use English by default, starting with Monday
       return [
         "Mon",
         "Tue",
@@ -101,13 +101,13 @@
   }
 
 
-  const getLessons = () => {
+  const getSessions = () => {
     const classes = getClasses()
-    return classes.reduce(getLessonList, [])
+    return classes.reduce(getSessionMap, {})
 
-    function getLessonList(lessonList, classDoc) {
-      // {
-      //   "contract_id":     "6dHpTJMSjejzne6XA",
+    function getSessionMap(sessionMap, classDoc) {
+      // { "name":            <string>
+      //   "contract_id":     <id string>,
       //   "start_date":      <date string>,
       //   "end_date":        <date or empty string>,
       //   "students":        [<student_id>, ...],
@@ -116,38 +116,59 @@
       //   "location":        <empty or gps string>,
       //   "travelling_time": <number | 0>,
       //   "regularity":      <"regular" | "variable">,
-      //   "scheduled":       [<lesson_id>, ...]
+      //   "scheduled":       [<session_id>, ...]
       //   "proposal":        <true if set by school or student>
       //   "_id":             <string>
       // }
 
       const {
-        colour,
+        name,
+        bg_colour,
         scheduled,
         zoom
       } = classDoc
 
       const query = { _id: { $in: scheduled }}
-      const lessons = Lesson.find(query).fetch()
-                            .filter(removeCancelled)
-                            .map(optimizeLessonData)
-      return [...lessonList, ...lessons]
+      Session.find(query).fetch()
+                         .filter(removeCancelled)
+                         .map(optimizeSessionData)
+                         .forEach(placeSessionInColumn)
+      return sessionMap
 
   
-      function removeCancelled(lesson) {
-        return !lesson.unscheduled && !lesson.forfeited
+      function removeCancelled(session) {
+        return !session.forfeited // && !session.unscheduled
       }
     
 
-      function optimizeLessonData(lesson) {
-        const { day, lesson_begin, lesson_end } = lesson
+      function optimizeSessionData(session) {
+        const { day, session_begin, session_end } = session
+
+        const begin  = getTimeArray(session_begin) // [17, 0]
+        const end    = getTimeArray(session_end)
+        const row    = (begin[0] - day_begin[0]) * 12
+                     + begin[1] - day_begin[1] + 1
+        const height = (end[0] - begin[0]) * 12
+                     + end[1] - begin[1]
+        // Start on Monday
         const column = (day + 6) % 7 // Mon becomes 0, Sun => 6 
         return { 
-          ...lesson,
-          colour,
-          zoom,
-          column
+          ...session,
+          name,
+          column,
+          row,
+          height,
+          bg_colour,
+          zoom
         }
+      }
+
+
+      function placeSessionInColumn(session) {
+        const { column } = session
+        const colMap = sessionMap[column]
+                   || (sessionMap[column] = {})
+        colMap[session.row] = session        
       }
     }
   }
@@ -156,33 +177,35 @@
   day_begin = getTimeArray(day_begin)
   day_end   = getTimeArray(day_end)
   weekdays  = getWeekdays(language)
-  const lessons = getLessons()
+  const sessions = getSessions()
 
   // We want to know:
   // * which day-column and 
-  // * which time-line each lesson should appear in
+  // * which time-line each session should appear in
   // * what colour it should be
   // * what text it should show
   // * what Zoom url it should open
-  console.log("lessons:", lessons);
+  
+  // console.log("sessions:", sessions);
   // _id:          "C3jRYE8B44iGSyXSr"
   // billed:       false
   // colour:       "#909"
+  // column:       3
   // date:         ""
   // day:          4
+  // height:       10
   // index:        2
-  // lesson_begin: 17.2
-  // lesson_end:   18.1
+  // row:          114
+  // session_begin: 17.2
+  // session_end:   18.1
   // supplement:   false
   // tentative:    false
   // zoom:         <url>
-  
-  
 
   return { 
     day_begin,
     day_end,
     weekdays,
-    lessons
+    sessions
   }
  }

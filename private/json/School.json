@@ -19,5 +19,12 @@
     "password": "",
     "rate": 2000,
     "_id": "aG7etWLmXCiddgiSb"
+  },
+  {
+    "name": "DCI",
+    "admin": "",
+    "password": "",
+    "rate": 0,
+    "_id": "ZA63AKt6DmJTQy96D"
   }
 ]

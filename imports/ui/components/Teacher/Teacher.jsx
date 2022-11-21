@@ -1,6 +1,6 @@
 /**
  * Teacher.jsx
- * 
+ *
  * Displays:
  * + [New...] button, to create
  *   - New student
@@ -10,7 +10,7 @@
  * + Calendar for the current week
  *   - Can scroll to show future weeks
  *   - Times shown every 2/3 columns
- *   - Earliest and latest times depend on expected lesson times
+ *   - Earliest and latest times depend on expected session times
  */
 
 import React, { useState } from 'react';
@@ -19,6 +19,7 @@ import { useTracker } from 'meteor/react-meteor-data'
 import styled from "styled-components"
 
 import { TeacherTracker } from './TeacherTracker'
+import { Session } from '../Timetable/Session'
 
 
 
@@ -30,29 +31,33 @@ const StyledWeek = styled.div`
     box-sizing: border-box;
   }
 
-  & div {
+  & > div {
     border-left: 1px solid black;
 
     & div {
-      height: calc(85vh / ${props => props.rows});
-      width: 14vw;
+      width: 14.25vw;
     }
 
-    & div:first-child {
+    & > div {
+      height: calc(85vh / ${props => props.rows});
+    }
+
+    & > div:first-child {
       text-align: center;
       height: 1em;
       border-bottom: 2px solid black;
     }
 
-    & div:nth-child(even) {
-      background-color: #f6f6f6;
+    & > div:nth-child(even) {
+      background-color: #00000008;
     }
 
-    & div:nth-child(12n+${props => props.hourLine + 1}) {
+    & > div:nth-child(12n+${props => props.hourLine + 1}) {
       border-bottom: 1px solid grey;
     }
   }
 `
+
 
 const StyledTime = styled.div`
   position: relative; /* because ::before is absolute */
@@ -65,9 +70,16 @@ const StyledTime = styled.div`
     left: -1.5em;
     font-family: monospace;
     text-align: center;
-    background-color: #fffc;
+    background-color: #fff9;
+    z-index: 2
   }
 `
+
+
+const StyledCell = styled.div`
+position: relative;
+`
+
 
 export const Teacher = () => {
   const { teacher_name } = useParams()
@@ -77,16 +89,19 @@ export const Teacher = () => {
   const {
     day_begin,
     day_end,
-    weekdays,
-    lessons,
+    weekdays=[],
+    sessions,
     error
   } = useTracker(() => TeacherTracker(teacher_name))
   // Simulated tracker data >>>
 
+  // Start on Monday
+  weekdays.push(weekdays.shift())
+
   if (error) {
     return <h1>{error}</h1>
   }
-  
+
   const hourLine = (12 - (day_begin[1] || 12))
 
   const rows = (day_end[0] - day_begin[0]) * 12
@@ -108,34 +123,64 @@ export const Teacher = () => {
     </>
   );
 
-  
+
   function buildGrid(week, day, dayIndex) {
+    const daySessions = sessions[dayIndex] || []
+
+    // console.log("day:", day, "daySessions:", daySessions);
+
+
     const useStart = !hourLine
     let hour = day_begin[0] + !useStart
-    const timeCol = (dayIndex + 1) % 3
-    
+    const timelessColumn = (dayIndex + 1) % 3
+
     const lines = new Array(rows + 1).fill(0).map((_, index) => {
-      const time    = ((index - hourLine) % 12 || timeCol)
+      const key     = `${day}_${index}`
+      const time    = ((index - hourLine) % 12 || timelessColumn)
                     ? ""
                     : hour++
       const content = index
-                    ? time
+                    ? ""
                     : day
+      const sessionData = daySessions[index] || 0
+      const sessionChild = sessionData
+                         ? (
+                             <Session
+                               {...sessionData}
+                             />
+                           )
+                         : ""
+
+      // if (sessionChild) {
+      //   console.log("sessionChild:", sessionChild);
+      // }
 
       if (time) {
         return (
           <StyledTime
-            key={`${day}_${index}`}
+            key={key}
             before={time}
-          ></StyledTime>
+          >
+            {sessionChild}
+          </StyledTime>
+        )
+
+      } else if (content) {
+        return (
+          <div
+            key={key}
+          >{content}</div>
+        )
+
+      } else {
+        return (
+          <StyledCell
+            key={key}
+          >
+            {sessionChild}
+          </StyledCell>
         )
       }
-
-      return (      
-        <div
-          key={`${day}_${index}`}
-        >{content}</div>
-      )
     })
 
     const dayLines = (

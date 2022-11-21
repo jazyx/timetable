@@ -33,7 +33,7 @@ const sources = [
   "Company",
   "Student",
   "Contract",
-  "Lesson",
+  "Session",
   "Class"
 ]
 const exo_ids = Object.keys(exo_collections)
