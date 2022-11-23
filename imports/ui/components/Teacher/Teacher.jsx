@@ -32,6 +32,7 @@ export const Teacher = () => {
   //   day_end,
   //   weekdays,
   //   sessions,
+  //   blocked
   //   OR
   //   error
   // }
@@ -47,6 +48,7 @@ export const Teacher = () => {
       />
       <Grid
         {...props}
+        days={8}
       />
     </>
   );

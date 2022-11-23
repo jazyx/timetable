@@ -8,7 +8,7 @@
     "tentative": false,
     "supplement": false,
     "forfeited": false,
-    "unscheduled": false,
+    "unscheduled": true,
     "billed": false,
     "_id": "7Eggh5P93j2dABPeW"
   },
@@ -21,7 +21,7 @@
     "tentative": false,
     "supplement": false,
     "forfeited": false,
-    "unscheduled": false,
+    "unscheduled": true,
     "billed": false,
     "_id": "LjTLEECBHh5gGf8X8"
   },
@@ -40,9 +40,9 @@
   },
   {
     "date": "",
-    "day": 3,
-    "session_begin": 11,
-    "session_end": 12,
+    "day": 4,
+    "session_begin": 14.3,
+    "session_end": 15.3,
     "index": 1,
     "tentative": false,
     "supplement": false,
@@ -151,7 +151,7 @@
     "tentative": false,
     "supplement": false,
     "forfeited": false,
-    "unscheduled": true,
+    "unscheduled": false,
     "billed": false,
     "_id": "jJzxMNNX4TtTuYw4F"
   },
@@ -203,7 +203,7 @@
     "tentative": false,
     "supplement": false,
     "forfeited": false,
-    "unscheduled": true,
+    "unscheduled": false,
     "billed": false,
     "_id": "5cyHQaLETENNGBGAD"
   },
@@ -297,5 +297,18 @@
     "unscheduled": false,
     "billed": false,
     "_id": "E85JMq97skHhzcSAE"
+  },
+  {
+    "date": "2202-11-21",
+    "day": 1,
+    "session_begin": 11.3,
+    "session_end": 12.3,
+    "index": 1,
+    "tentative": false,
+    "supplement": false,
+    "forfeited": false,
+    "unscheduled": true,
+    "billed": false,
+    "_id": "3gf5fpeDGsDYpKs6e"
   }
 ]

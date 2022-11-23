@@ -1,19 +1,19 @@
 /**
- * 
+ *
  */
 
- import collections from '/imports/api/collections/'
- const {
+import collections from '/imports/api/collections/'
+const {
   Teacher,
   Contract,
   Class,
   Session,
   L10n
 } = collections
- 
- 
- 
- export const TeacherTracker = (teacher_name) => {
+
+
+
+export const TeacherTracker = (teacher_name) => {
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
   //   "name":       "James",
@@ -23,6 +23,8 @@
   //   "day_begin":  7.3,
   //   "day_end":    20.3,
   //   "_id":        "AiuEdtgtGJXXSZDak"
+  //   "unavailable":{ <day>: [[<start_time>, <end_time>], ...], ...}
+  //   "inconvenien":{ <day>: [[<start_time>, <end_time>], ...], ...}
   // }
 
   if (!teacherData) {
@@ -30,11 +32,13 @@
   }
 
 
-  let { 
+  let {
     _id,
     day_begin,
     day_end,
-    language
+    language,
+    unavailable,
+    inconvenient
   } = teacherData
 
 
@@ -50,7 +54,7 @@
     const l10n = L10n.findOne({ code: language }, { d: 1 })
     if ( l10n && l10n.d ) {
       return l10n.d
-  
+
     } else { // use English by default, starting with Monday
       return [
         "Mon",
@@ -112,7 +116,7 @@
       //   "end_date":        <date or empty string>,
       //   "students":        [<student_id>, ...],
       //   "colour":          <hex string>,
-      //   "zoom":            <url>,
+      //   "link":            <url>,
       //   "location":        <empty or gps string>,
       //   "travelling_time": <number | 0>,
       //   "regularity":      <"regular" | "variable">,
@@ -125,7 +129,7 @@
         name,
         bg_colour,
         scheduled,
-        zoom
+        link
       } = classDoc
 
       const query = { _id: { $in: scheduled }}
@@ -135,11 +139,11 @@
                          .forEach(placeSessionInColumn)
       return sessionMap
 
-  
+
       function removeCancelled(session) {
         return !session.forfeited // && !session.unscheduled
       }
-    
+
 
       function optimizeSessionData(session) {
         const { day, session_begin, session_end } = session
@@ -151,15 +155,15 @@
         const height = (end[0] - begin[0]) * 12
                      + end[1] - begin[1]
         // Start on Monday
-        const column = (day + 6) % 7 // Mon becomes 0, Sun => 6 
-        return { 
+        const column = (day + 6) % 7 // Mon becomes 0, Sun => 6
+        return {
           ...session,
           name,
           column,
           row,
           height,
           bg_colour,
-          zoom
+          link
         }
       }
 
@@ -168,24 +172,30 @@
         const { column } = session
         const colMap = sessionMap[column]
                    || (sessionMap[column] = {})
-        colMap[session.row] = session        
+        colMap[session.row] = session
       }
     }
   }
 
 
-  day_begin = getTimeArray(day_begin)
-  day_end   = getTimeArray(day_end)
-  weekdays  = getWeekdays(language)
+  const getBlocked = (unavailable, inconvenient) => {
+
+  }
+
+
+  day_begin   = getTimeArray(day_begin)
+  day_end     = getTimeArray(day_end)
+  weekdays    = getWeekdays(language)
+  const blocked  = getBlocked(unavailable, inconvenient)
   const sessions = getSessions()
 
   // We want to know:
-  // * which day-column and 
+  // * which day-column and
   // * which time-line each session should appear in
   // * what colour it should be
   // * what text it should show
-  // * what Zoom url it should open
-  
+  // * what link url it should open
+
   // console.log("sessions:", sessions);
   // _id:          "C3jRYE8B44iGSyXSr"
   // billed:       false
@@ -200,12 +210,12 @@
   // session_end:   18.1
   // supplement:   false
   // tentative:    false
-  // zoom:         <url>
+  // link:         <url>
 
-  return { 
+  return {
     day_begin,
     day_end,
     weekdays,
     sessions
   }
- }
+}

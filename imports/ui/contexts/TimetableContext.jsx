@@ -1,13 +1,11 @@
 import React, {
   createContext,
   useState,
-  useReducer,
   useEffect
 } from 'react'
 
-
 import collections from '/imports/api/collections'
-// import { removeFrom } from '/imports/api/tools/utilities'
+import { removeFrom } from '/imports/tools/utilities'
 
 
 
@@ -32,7 +30,7 @@ export const TimetableProvider = ({children}) => {
 
   const subscribeToCollections = () => {
     for (let collectionName in collections) {
-      unReady.push(collectionName)      
+      unReady.push(collectionName)
 
       const collection = collections[collectionName]
       const callback = () => isReady(collectionName)
@@ -49,7 +47,7 @@ export const TimetableProvider = ({children}) => {
   return (
     <TimetableContext.Provider
       value={{
-        ready, // set to true when core collections are online
+        ready // set to true when core collections are online
       }}
     >
       {children}

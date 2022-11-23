@@ -6,6 +6,42 @@
     "rate": 2000,
     "day_begin": 7.3,
     "day_end": 19.3,
-    "_id": "AiuEdtgtGJXXSZDak"
+    "_id": "AiuEdtgtGJXXSZDak",
+    "unavailable": {
+      "0": [
+        [
+          0,
+          24
+        ]
+      ],
+      "2": [
+        [
+          0,
+          24
+        ]
+      ],
+      "5": [
+        [
+          10.3,
+          11
+        ],
+        [
+          14.15,
+          15
+        ]
+      ],
+      "6": [
+        14.3,
+        24
+      ]
+    },
+    "inconvenient": {
+      "3": [
+        [
+          0,
+          24
+        ]
+      ]
+    }
   }
 ]

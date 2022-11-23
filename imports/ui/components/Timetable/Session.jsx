@@ -24,7 +24,7 @@ const StyledSession = styled.div`
 `
 
 export const Session = (props) => {
-  // const { height, colour, zoom } = props
+  // const { height, colour, link } = props
 
   if (!props.height) {
     return ""

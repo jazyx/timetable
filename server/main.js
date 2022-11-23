@@ -1,21 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import collections from '/imports/api/collections';
 
-// Run init.js as a side-effect
+// Run init.js and publisher.js as side-effects
 import './init.js'
-
-// const {
-//   Company
-// } = collections
-
-
-
-// function insertLink({ title, url }) {
-// }
-
-// Meteor.startup(() => {
-//   // If the Links collection is empty, add some data.
-//   if (Company.find().count() === 0) {
-//     console.log("No companies yet:");
-//   }
-// });
+import '/imports/api/collections/publisher.js'
