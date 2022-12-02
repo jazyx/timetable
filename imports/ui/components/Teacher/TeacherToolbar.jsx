@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from "styled-components"
 
+import { TimeZones } from '../Timetable/TimeZones'
+
 
 
 const StyledBar = styled.div`
@@ -25,6 +27,7 @@ export const TeacherToolbar = ({teacher_name}) => {
     <StyledBar>
       <span className="name">{teacher_name} </span>
       <span className="tools">(tools will go here)</span>
+      <TimeZones />
     </StyledBar>
   );
 };

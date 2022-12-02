@@ -7,8 +7,9 @@ export const Teacher     = new Mongo.Collection("teacher");
 export const Contract    = new Mongo.Collection("contract");
 export const Class       = new Mongo.Collection("class");
 export const Student     = new Mongo.Collection("student");
-export const Session      = new Mongo.Collection("session");
+export const Session     = new Mongo.Collection("session");
 export const Spreadsheet = new Mongo.Collection("spreadsheet");
+export const TimeZone    = new Mongo.Collection("timezone");
 
 // You can use either:
 //

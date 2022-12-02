@@ -2,6 +2,9 @@
  *
  */
 
+import { useContext } from 'react';
+import { TimetableContext } from '../../contexts/TimetableContext';
+
 import collections from '/imports/api/collections/'
 const {
   Teacher,
@@ -14,17 +17,22 @@ const {
 
 
 export const TeacherTracker = (teacher_name) => {
+  const {
+    today,
+    daysToDisplay,
+  } = useContext(TimetableContext)
+
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
-  //   "name":       "James",
-  //   "password":   "TIiudhtm11LE",
-  //   "language":   "en",
-  //   "rate":       2000,
-  //   "day_begin":  7.3,
-  //   "day_end":    20.3,
-  //   "_id":        "AiuEdtgtGJXXSZDak"
-  //   "unavailable":{ <day>: [[<start_time>, <end_time>], ...], ...}
-  //   "inconvenien":{ <day>: [[<start_time>, <end_time>], ...], ...}
+  //   "name":        "James",
+  //   "password":    "TIiudhtm11LE",
+  //   "language":    "en",
+  //   "rate":        2000,
+  //   "day_begin":   7.3,
+  //   "day_end":     20.3,
+  //   "_id":         "AiuEdtgtGJXXSZDak"
+  //   "unavailable": { <day>: [[<start_time>, <end_time>], ...], ...}
+  //   "inconvenient":{ <day>: [[<start_time>, <end_time>], ...], ...}
   // }
 
   if (!teacherData) {
@@ -126,22 +134,58 @@ export const TeacherTracker = (teacher_name) => {
       // }
 
       const {
+        _id: class_id,
         name,
         bg_colour,
         scheduled,
         link
       } = classDoc
 
-      const query = { _id: { $in: scheduled }}
-      Session.find(query).fetch()
-                         .filter(removeCancelled)
-                         .map(optimizeSessionData)
-                         .forEach(placeSessionInColumn)
+      const query = { class_id }
+      const sessions = Session.find(query)
+                              .fetch()
+                              .filter(removeForfeited)
+      // Order chronologically, with precisely dated sessions first
+                              .sort(byDateBeginDay)
+      // console.log("sessions", JSON.stringify(sessions, null, '  '));
+
+                          // .map(optimizeSessionData)
+                          // .forEach(placeSessionInColumn)
       return sessionMap
 
 
-      function removeCancelled(session) {
-        return !session.forfeited // && !session.unscheduled
+      function removeForfeited(session) {
+        // forfeited records are only needed for calculating salary
+        return !session.forfeited
+      }
+
+
+      function byDateBeginDay(a, b) {
+        if (a.date && b.date) {
+          if (a.date === b.date) {
+            // sort by start time
+            return a.session_begin - b.session_begin
+          }
+
+          // sort by date
+          return a.date < b.date ? -1 : 1
+        }
+
+        if (a.date) { // b defines a day
+          // sort dates before days
+          return -1
+        } else if (b.date) { // a defines a day
+          // ditto
+          return 1
+        }
+
+        if (a.day === b.day) {
+          // sort by session_begin
+          return a.session_begin - b.session_begin
+        }
+
+        // sort by day
+        return a.day < b.day ? -1 : 1
       }
 
 
@@ -216,6 +260,8 @@ export const TeacherTracker = (teacher_name) => {
     day_begin,
     day_end,
     weekdays,
-    sessions
+    sessions,
+    // today,
+    daysToDisplay
   }
 }

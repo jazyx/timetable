@@ -2,7 +2,6 @@
   {
     "name": "Вячеслав Соколов",
     "contract_id": "Y7mozM8TrAZ6nJ7DX",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#c00",
@@ -10,17 +9,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "7Eggh5P93j2dABPeW",
-      "LjTLEECBHh5gGf8X8"
-    ],
     "proposal": false,
     "_id": "fS5S5XbwZCtQW5odj"
   },
   {
     "name": "Lactalis",
     "contract_id": "6dHpTJMSjejzne6XA",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [
       "2Xqsfrt87wZot3HS2",
@@ -43,17 +37,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "o893kkcLdu2k4WJAj",
-      "C3jRYE8B44iGSyXSr"
-    ],
     "proposal": false,
     "_id": "dLGaj7bYjwfs6K6Z5"
   },
   {
     "name": "Татьяна Корепанова",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#090",
@@ -61,17 +50,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "zLN2rg57nj4gBEjBA",
-      "zngRoFzSS8roEa2uH"
-    ],
     "proposal": false,
     "_id": "NxstbaN6uMsgTunxL"
   },
   {
     "name": "Наталья Потамиянос",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#3c3",
@@ -79,16 +63,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "ubasr8TLfZw6ZBDBi"
-    ],
     "proposal": false,
     "_id": "Y76fHWnexT3cDxFv3"
   },
   {
     "name": "Елена Лавонина",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#090",
@@ -96,17 +76,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "DZHKQ6XJ4ZRxErNDd",
-      "Dwpng7tRnA8DBGNqt"
-    ],
     "proposal": false,
     "_id": "YMaYLeGWfYZNemjHp"
   },
   {
     "name": "Екатерина Турфина",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#097",
@@ -114,17 +89,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "bmste4E3BRmJMKWkg",
-      "hA2uNnAtSH2dk46AN"
-    ],
     "proposal": false,
     "_id": "dWaPkRrcKCJZKWyZ7"
   },
   {
     "name": "Артур Запиров",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#070",
@@ -132,17 +102,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "jJzxMNNX4TtTuYw4F",
-      "nDBHMb9n6x94oJudT"
-    ],
     "proposal": false,
     "_id": "3RWqhHwGZnexHgDK9"
   },
   {
     "name": "Наталья Бирюкова",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#093",
@@ -150,52 +115,25 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "KMa8vWaoYrgaJ7975",
-      "u9x9qWCwkzcoxstoX"
-    ],
     "proposal": false,
     "_id": "LeyF4ApviyfZJWrjM"
   },
   {
     "name": "Юлия Чинкова",
     "contract_id": "SiGN6gbJzyXxoukAj",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#066",
     "link": "https://us02web.zoom.us/j/86058212509?pwd=QUV1N3U1RlB3bUpMT29WSDVFRk9PZz09",
     "location": "",
     "travelling_time": 0,
-    "regularity": "regular",
-    "scheduled": [
-      "owdXuvYfWTAo7vb48",
-      "QDNAWXGgMyFBZeMYE"
-    ],
+    "regularity": "variable",
     "proposal": false,
     "_id": "ghYub9ddvzAKY3dTA"
   },
   {
-    "name": "Алекс",
-    "contract_id": "Db68TSyb2sLcgAr8C",
-    "start_date": "2022-11-11",
-    "end_date": "",
-    "students": [],
-    "bg_colour": "#909",
-    "link": "https://us02web.zoom.us/j/86058212509?pwd=QUV1N3U1RlB3bUpMT29WSDVFRk9PZz09",
-    "location": "",
-    "travelling_time": 0,
-    "regularity": "regular",
-    "scheduled": [
-      "5cyHQaLETENNGBGAD"
-    ],
-    "proposal": false,
-    "_id": "RzgTkBSgPtN5LA6FC"
-  },
-  {
     "name": "Вадим",
     "contract_id": "xEnpMtTnMpB99gbN8",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#00c",
@@ -203,16 +141,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "FekuG4B4jSZvwZ2Tq"
-    ],
     "proposal": false,
     "_id": "BkWNjSDbd8e6kYuTW"
   },
   {
     "name": "Дима",
     "contract_id": "uLCYZtQvT45pjoWMA",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#36c",
@@ -220,16 +154,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "oFKonsvm8876onfAn"
-    ],
     "proposal": false,
     "_id": "gSkuen4yFWDebzPNA"
   },
   {
     "name": "Андрей",
     "contract_id": "uLCYZtQvT45pjoWMA",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#33c",
@@ -237,16 +167,25 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "zpztKq2ReFFyiJr8m"
-    ],
     "proposal": false,
     "_id": "Dwp6EtpwQNYiaev8N"
   },
   {
+    "name": "Алекс",
+    "contract_id": "Db68TSyb2sLcgAr8C",
+    "end_date": "",
+    "students": [],
+    "bg_colour": "#909",
+    "link": "https://us02web.zoom.us/j/86058212509?pwd=QUV1N3U1RlB3bUpMT29WSDVFRk9PZz09",
+    "location": "",
+    "travelling_time": 0,
+    "regularity": "regular",
+    "proposal": false,
+    "_id": "RzgTkBSgPtN5LA6FC"
+  },
+  {
     "name": "E05-A",
     "contract_id": "MdSSrX99k7TzSx7NL",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#999",
@@ -254,16 +193,12 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "p93aZirQAMmXE7Rwk"
-    ],
     "proposal": false,
     "_id": "5uZq6xkEWEgWLm8DA"
   },
   {
     "name": "E05-B",
     "contract_id": "MdSSrX99k7TzSx7NL",
-    "start_date": "2022-11-11",
     "end_date": "",
     "students": [],
     "bg_colour": "#99a",
@@ -271,9 +206,6 @@
     "location": "",
     "travelling_time": 0,
     "regularity": "regular",
-    "scheduled": [
-      "E85JMq97skHhzcSAE"
-    ],
     "proposal": false,
     "_id": "sL5aEQhHzkqh8etMm"
   }

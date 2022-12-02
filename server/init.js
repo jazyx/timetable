@@ -64,7 +64,7 @@ function populateFromJSON(name) {
         docs.forEach( doc => {
           if (isDevelopment) {
             insertProper_ids(doc)
-            // convertDates(doc)
+            convertDates(doc)
           }
           doc._id = collection.insert(doc)
         })
@@ -91,20 +91,18 @@ function populateFromJSON(name) {
         })
       }
 
-      // function convertDates(doc) {
-      //   const keys = Object.keys(doc)
-      //                      .filter( key => key.includes("date"))
-      //   if (keys.length) {
-      //     console.log("keys:", keys);
-      //   }
+      function convertDates(doc) {
+        const keys = Object.keys(doc)
+                           .filter( key => key.includes("date"))
 
-      //   keys.forEach( key => {
-      //     const date = doc[key]
-      //     if (date) {
-      //       doc[key] = new Date(doc[key])
-      //     }
-      //   })
-      // }
+        keys.forEach( key => {
+          let date = doc[key]
+          if (date) {
+            date = new Date(new Date(doc[key]).setHours(0,0,0,0))
+            doc[key] = date.toISOString()
+          }
+        })
+      }
 
     } catch {
       console.log(`Can't parse text from private/${fileName}`)

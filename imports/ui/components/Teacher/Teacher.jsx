@@ -17,8 +17,9 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data'
 
+
 import { TeacherTracker } from './TeacherTracker'
-import { TeacherToolbar, ToolBar } from './TeacherToolbar'
+import { TeacherToolbar } from './TeacherToolbar'
 import { Grid } from '../Timetable/Grid'
 
 
@@ -48,7 +49,6 @@ export const Teacher = () => {
       />
       <Grid
         {...props}
-        days={8}
       />
     </>
   );
