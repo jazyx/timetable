@@ -820,3 +820,84 @@ export const getElementIndex = (element, parentTag) => {
 
   return index
 }
+
+
+
+// DATE AND TIME //
+
+export const getTimeValues = (timeZone) => {
+  // Get the current time in GMT
+  const now = new Date()
+  // 2022-12-02T21:00:00.000Z ("Europe/Moscow")
+
+  // Express this in the timeZone of the operating system:
+  // 04/12/2022, 19:51:30
+  let isoString
+  try {
+    isoString = now.toLocaleString( "en-GB", { timeZone })
+  } catch(error) {
+    // Use locale timeZone by default if timeZone is invalid
+    isoString = now.toLocaleString("en-GB")
+  }
+
+  // This isoString does not include milliseconds, so we need
+  // to ask for them specifically. We multiply by * 1 to convert
+  // a string to a number (as we also do with minute and second
+  // below).
+  const decimals = now.toLocaleString(
+    "en-GB", { fractionalSecondDigits: 3 }
+  ) * 1
+
+  // Grab all the time units since midnight...
+  let [ date, time ] = isoString.split(", ")
+  let [ hour, minute, second ] = time.split(":")
+  minute = minute * 1
+  second = second * 1
+
+  // ... and remove the appropriate number of milliseconds from
+  //  `now` to obtain the GMT time at midnight this morning.
+  let msBack = (
+    (
+      (
+        (hour * 60) + minute
+      ) * 60
+    ) + second
+  ) * 1000 + decimals
+
+  const midnight = new Date(now.getTime() - msBack)
+
+  // Find the current day in the given timeZone:
+  let [ day, month, year ] = date.split("/")
+  date = `${year}-${month}-${day}`
+  day = new Date(date).getDay() // 0 = Sunday, 6 = Saturday.
+
+  // Remove the appropriate number of milliseconds to get
+  // midnight on Monday at the beginning of this week (which
+  // might be today).
+  msBack = ((day + 6) % 7) * 24 * 60 * 60 * 1000
+
+  const monday = new Date(midnight.getTime() - msBack)
+
+  return { midnight, monday, day }
+}
+
+
+export const getTimeBetween = (date1, date2) => {
+  if (!date2) {
+    date2 = new Date()
+  }
+
+  let ms = date2 - date1
+  let seconds = parseInt(ms / 1000)
+  ms       = 0 + ms % 1000
+  let minutes = parseInt(seconds / 60)
+  seconds  = 0 + seconds % 60
+  let hours = parseInt(minutes / 60)
+  minutes  = 0 + minutes % 60
+  let days = 0 + parseInt(hours / 24)
+  hours    = 0 + hours % 24
+
+  return {
+    days, hours, minutes, seconds, ms
+  }
+}

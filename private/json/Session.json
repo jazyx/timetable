@@ -1,261 +1,43 @@
 [
   {
-    "name-remove-later": "Слава",
-    "day": 3,
-    "session_begin": 8.3,
+    "name_remove_later": "Слава every Wed",
+    "repeat_from_date": "2022-11-23T05:30:00.000Z",
     "duration": 60,
     "index": 1,
     "class_id": "fS5S5XbwZCtQW5odj",
-    "_id": "7Eggh5P93j2dABPeW"
+    "_id": "j5jT5biBAJgEYbrX2"
   },
   {
-    "name-remove-later": "Слава",
-    "day": 5,
-    "session_begin": 8.3,
+    "name_remove_later": "Слава every Fri",
+    "repeat_from_date": "2022-11-25T05:30:00.000Z",
     "duration": 60,
-    "index": 1,
+    "index": 2,
     "class_id": "fS5S5XbwZCtQW5odj",
     "_id": "LjTLEECBHh5gGf8X8"
   },
   {
-    "name-remove-later": "Наталья",
-    "day": 6,
-    "session_begin": 12.3,
-    "duration": 60,
-    "index": 1,
-    "class_id": "ubasr8TLfZw6ZBDBi",
-    "_id": "ZNxYseT4hvJeRvP7N"
-  },
-  {
-    "name-remove-later": "Татьяна",
-    "day": 4,
-    "session_begin": 14.3,
-    "duration": 60,
-    "index": 1,
-    "class_id": "NxstbaN6uMsgTunxL",
-    "_id": "zLN2rg57nj4gBEjBA"
-  },
-  {
-    "name-remove-later": "Татьяна",
-    "day": 6,
-    "session_begin": 11.15,
+    "name_remove_later": "Слава Friday",
+    "date": "2022-12-02T05:30:00.000Z",
     "duration": 60,
     "index": 2,
-    "class_id": "NxstbaN6uMsgTunxL",
-    "_id": "zngRoFzSS8roEa2uH"
-  },
-  {
-    "name-remove-later": "Lactalis",
-    "day": 1,
-    "session_begin": 17,
-    "duration": 60,
-    "index": 1,
-    "class_id": "dLGaj7bYjwfs6K6Z5",
-    "_id": "o893kkcLdu2k4WJAj"
-  },
-  {
-    "name-remove-later": "Lactalis",
-    "day": 4,
-    "session_begin": 17.2,
-    "duration": 60,
-    "index": 2,
-    "class_id": "dLGaj7bYjwfs6K6Z5",
-    "_id": "C3jRYE8B44iGSyXSr"
-  },
-  {
-    "name-remove-later": "Елена",
-    "day": 1,
-    "session_begin": 8.3,
-    "duration": 60,
-    "index": 1,
-    "class_id": "YMaYLeGWfYZNemjHp",
-    "_id": "DZHKQ6XJ4ZRxErNDd"
-  },
-  {
-    "name-remove-later": "Елена",
-    "day": 4,
-    "session_begin": 8,
-    "duration": 60,
-    "index": 2,
-    "class_id": "YMaYLeGWfYZNemjHp",
-    "_id": "Dwpng7tRnA8DBGNqt"
-  },
-  {
-    "name-remove-later": "Екатерина",
-    "day": 2,
-    "session_begin": 8.3,
-    "duration": 60,
-    "index": 1,
-    "class_id": "dWaPkRrcKCJZKWyZ7",
-    "_id": "bmste4E3BRmJMKWkg"
-  },
-  {
-    "name-remove-later": "Екатерина",
-    "day": 4,
-    "session_begin": 9.05,
-    "duration": 60,
-    "index": 2,
-    "class_id": "dWaPkRrcKCJZKWyZ7",
-    "_id": "hA2uNnAtSH2dk46AN"
-  },
-  {
-    "name-remove-later": "Артур",
-    "day": 1,
-    "session_begin": 11.3,
-    "duration": 60,
-    "index": 1,
-    "class_id": "3RWqhHwGZnexHgDK9",
-    "_id": "jJzxMNNX4TtTuYw4F"
-  },
-  {
-    "name-remove-later": "Артур",
-    "day": 4,
-    "session_begin": 11.3,
-    "duration": 60,
-    "index": 2,
-    "class_id": "3RWqhHwGZnexHgDK9",
-    "_id": "nDBHMb9n6x94oJudT"
-  },
-  {
-    "name-remove-later": "Наталья Бирюкова",
-    "day": 1,
-    "session_begin": 13,
-    "duration": 60,
-    "index": 1,
-    "class_id": "LeyF4ApviyfZJWrjM",
-    "_id": "KMa8vWaoYrgaJ7975"
-  },
-  {
-    "name-remove-later": "Наталья Бирюкова",
-    "day": 4,
-    "session_begin": 13,
-    "duration": 60,
-    "index": 2,
-    "class_id": "LeyF4ApviyfZJWrjM",
-    "_id": "u9x9qWCwkzcoxstoX"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "day": 3,
-    "session_begin": 10,
-    "duration": 60,
-    "index": 1,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "owdXuvYfWTAo7vb48"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "day": 4,
-    "session_begin": 10.05,
-    "duration": 60,
-    "index": 2,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "QDNAWXGgMyFBZeMYE"
-  },
-  {
-    "name-remove-later": "Вадим",
-    "day": 6,
-    "session_begin": 13.35,
-    "duration": 60,
-    "index": 1,
-    "class_id": "BkWNjSDbd8e6kYuTW",
-    "_id": "FekuG4B4jSZvwZ2Tq"
-  },
-  {
-    "name-remove-later": "Дима",
-    "day": 6,
-    "session_begin": 9.4,
-    "duration": 40,
-    "index": 1,
-    "class_id": "gSkuen4yFWDebzPNA",
-    "_id": "oFKonsvm8876onfAn"
-  },
-  {
-    "name-remove-later": "Андрей",
-    "day": 6,
-    "session_begin": 10.25,
-    "duration": 40,
-    "index": 1,
-    "class_id": "Dwp6EtpwQNYiaev8N",
-    "_id": "zpztKq2ReFFyiJr8m"
-  },
-  {
-    "name-remove-later": "Алекс",
-    "day": 1,
-    "session_begin": 18.15,
-    "duration": 45,
-    "index": 1,
-    "class_id": "RzgTkBSgPtN5LA6FC",
-    "_id": "5cyHQaLETENNGBGAD"
-  },
-  {
-    "name-remove-later": "E05-A",
-    "day": 5,
-    "session_begin": 11,
-    "duration": 195,
-    "index": 1,
-    "class_id": "5uZq6xkEWEgWLm8DA",
-    "_id": "p93aZirQAMmXE7Rwk"
-  },
-  {
-    "name-remove-later": "E05-B",
-    "day": 5,
-    "session_begin": 15,
-    "duration": 195,
-    "index": 1,
-    "class_id": "5uZq6xkEWEgWLm8DA",
-    "_id": "E85JMq97skHhzcSAE"
-  },
-  {
-    "name-remove-later": "Артур",
-    "day": 1,
-    "session_begin": 11.3,
-    "duration": 60,
-    "index": 1,
-    "unscheduled": true,
-    "class_id": "sL5aEQhHzkqh8etMm",
-    "_id": "3gf5fpeDGsDYpKs6e"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "session_begin": 10,
-    "duration": 60,
-    "index": 1,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "ErGFYWt3gKk9FNsMQ"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "session_begin": 10.05,
-    "duration": 60,
-    "index": 2,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "Ex5Syqz6xugETnF4P"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "session_begin": 14,
-    "duration": 60,
-    "index": 1,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "cACSZZTZAJcgrLba8"
-  },
-  {
-    "name-remove-later": "Юлия",
-    "session_begin": 16,
-    "duration": 60,
-    "index": 2,
-    "class_id": "ghYub9ddvzAKY3dTA",
-    "_id": "zMBQa4Q9jBiHo9gwq"
-  },
-  {
-    "name-remove-later": "Слава",
-    "date": "2022-11-24T21:00:00.000Z",
-    "session_begin": 8.3,
-    "duration": 60,
-    "index": 1,
-    "unscheduled": true,
     "class_id": "fS5S5XbwZCtQW5odj",
-    "_id": "ifF4QmF9ZntbKo5ZR"
+    "_id": "7Eggh5P93j2dABPeW"
+  },
+  {
+    "name_remove_later": "Слава Wednesday",
+    "date": "2022-11-30T05:30:00.000Z",
+    "duration": 60,
+    "index": 1,
+    "class_id": "fS5S5XbwZCtQW5odj",
+    "_id": "TwFvtuDKYdX7M6qP2"
+  },
+  {
+    "name_remove_later": "Слава Cancelled Friday",
+    "date": "2022-11-25T05:30:00.000Z",
+    "duration": 60,
+    "index": 2,
+    "class_id": "fS5S5XbwZCtQW5odj",
+    "forfeited": true,
+    "_id": "mocLWuybnNYKuNrDJ"
   }
 ]

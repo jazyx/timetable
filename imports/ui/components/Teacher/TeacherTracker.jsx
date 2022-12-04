@@ -14,11 +14,18 @@ const {
   L10n
 } = collections
 
+import {
+  getTimeBetween
+} from '/imports/tools/utilities'
+
 
 
 export const TeacherTracker = (teacher_name) => {
   const {
-    today,
+    midnight,
+    monday,
+    day,
+    endTime,
     daysToDisplay,
   } = useContext(TimetableContext)
 
@@ -50,6 +57,7 @@ export const TeacherTracker = (teacher_name) => {
   } = teacherData
 
 
+
   const getTimeArray = (decimal) => {
     const hour = parseInt(decimal, 10)
     const line = Math.round((decimal % 1 * 100) % 60 / 5)
@@ -77,6 +85,7 @@ export const TeacherTracker = (teacher_name) => {
   }
 
 
+  // Get _ids of contracts signed with the current teacher
   const getContracts = () => {
     const query = { teacher_id: _id }
     const fields = { _id: 1 }
@@ -87,34 +96,38 @@ export const TeacherTracker = (teacher_name) => {
   }
 
 
-  const onlyCurrentClasses = (classDoc) => {
-    const { start_date=0, end_date=0 } = classDoc
-    const now = new Date()
+  const getClasses = () => {
+    const contracts = getContracts() // for current teacher
+    // console.log("contracts:", contracts);
+    // [ <contract_id>, ... ]
 
-    if (!start_date) {
-      return false
-    } else if (new Date(start_date) > now) {
-      return false
-    } else if (end_date && new Date(end_date) < now ) {
-      return false
+    // Find all classes associated with active contracts,
+    // starting any time before the end of the period to
+    // display, and ending no earlier than the beginning.
+    const contract_id = { $in: contracts }
+    const start_date = { $lte: endTime}
+    const end_date = [
+      { end_date: { $exists: false } },
+      { end_date: "" },
+      { end_date: { $gte: monday } }
+    ]
+    const query = {
+      $and: [
+        { contract_id },
+        { start_date },
+        { $or: end_date }
+      ]
     }
 
-    return true
-  }
-
-
-  const getClasses = () => {
-    const contracts = getContracts()
-    const query = { contract_id: { $in: contracts }}
     const classes = Class.find(query)
                          .fetch()
-                         .filter(onlyCurrentClasses)
     return classes
   }
 
 
   const getSessions = () => {
     const classes = getClasses()
+    const treated = {}
     return classes.reduce(getSessionMap, {})
 
     function getSessionMap(sessionMap, classDoc) {
@@ -123,145 +136,119 @@ export const TeacherTracker = (teacher_name) => {
       //   "start_date":      <date string>,
       //   "end_date":        <date or empty string>,
       //   "students":        [<student_id>, ...],
-      //   "colour":          <hex string>,
+      //   "bg_colour":       <hex string>,
       //   "link":            <url>,
       //   "location":        <empty or gps string>,
       //   "travelling_time": <number | 0>,
-      //   "regularity":      <"regular" | "variable">,
-      //   "scheduled":       [<session_id>, ...]
       //   "proposal":        <true if set by school or student>
       //   "_id":             <string>
       // }
 
-      const {
-        _id: class_id,
-        name,
-        bg_colour,
-        scheduled,
-        link
-      } = classDoc
-
-      const query = { class_id }
+      const { _id: class_id } = classDoc
+      // Find all sessions with this class_id, which either
+      // are repeated_from_(an earlier)_date
+      // or
+      // fall in the period from monday to endTime
+      const query = { $and: [
+        { class_id },
+        { forfeited: { $exists: 0 } },
+        { $or: [
+          { repeat_from_date: { $exists: 1 } },
+          { date: {
+            $gte: monday,
+            $lte: endTime
+          }}
+        ]}
+      ]}
       const sessions = Session.find(query)
                               .fetch()
-                              .filter(removeForfeited)
       // Order chronologically, with precisely dated sessions first
                               .sort(byDateBeginDay)
-      // console.log("sessions", JSON.stringify(sessions, null, '  '));
+                              .forEach(placeSession)
 
-                          // .map(optimizeSessionData)
-                          // .forEach(placeSessionInColumn)
+      // console.log("treated:", treated);
+      // console.log("sessions", JSON.stringify(sessions, null, '  '));
       return sessionMap
 
-
-      function removeForfeited(session) {
-        // forfeited records are only needed for calculating salary
-        return !session.forfeited
-      }
 
 
       function byDateBeginDay(a, b) {
         if (a.date && b.date) {
-          if (a.date === b.date) {
-            // sort by start time
-            return a.session_begin - b.session_begin
-          }
-
-          // sort by date
-          return a.date < b.date ? -1 : 1
+          return a.date - b.date
         }
 
-        if (a.date) { // b defines a day
+        if (a.date) { // b defines repeat_from_date
           // sort dates before days
           return -1
-        } else if (b.date) { // a defines a day
+        } else if (b.date) { // a defines repeat_from_date
           // ditto
           return 1
         }
 
-        if (a.day === b.day) {
-          // sort by session_begin
-          return a.session_begin - b.session_begin
-        }
-
-        // sort by day
-        return a.day < b.day ? -1 : 1
+        // The order of repeat_from_dates is not really important
+        return a.repeat_from_date - b.repeat_from_date
       }
 
 
-      function optimizeSessionData(session) {
-        const { day, session_begin, session_end } = session
 
-        const begin  = getTimeArray(session_begin) // [17, 0]
-        const end    = getTimeArray(session_end)
-        const row    = (begin[0] - day_begin[0]) * 12
-                     + begin[1] - day_begin[1] + 1
-        const height = (end[0] - begin[0]) * 12
-                     + end[1] - begin[1]
-        // Start on Monday
-        const column = (day + 6) % 7 // Mon becomes 0, Sun => 6
-        return {
-          ...session,
-          name,
-          column,
-          row,
-          height,
-          bg_colour,
-          link
+      function placeSession(session) {
+        const {
+          _id,
+          date,
+          repeat_from_date,
+          duration,
+          index,
+        } = session
+
+        const height = duration / 5
+
+        if (date) {
+          // Place this dated session
+          const { days: column } = getTimeBetween(monday, date)
+          const daySlot  = sessionMap[column]
+                       || (sessionMap[column] = {})
+          // Round time to nearest 5 minute block
+          const minutes = Math.floor(date.getMinutes() / 5) * 0.05
+          const time = date.getHours() + minutes // x.0 - x.55
+          const begin  = getTimeArray(time) // [17, 0]
+          // Place session in appropriate row
+          const row    = (begin[0] - day_begin[0]) * 12
+                        + begin[1] - day_begin[1] + 1
+          daySlot[row] = {
+            ...session,
+            ...classDoc,
+            column,
+            row,
+            height,
+          }
+
+          // Remember which week it was placed in.
+          const week      = parseInt(column / 7)
+          const weekSlot  = treated[week] || (treated[week] = {})
+          const classSlot = weekSlot[class_id]
+                        || (weekSlot[class_id] = [])
+          classSlot.push(index)
         }
-      }
-
-
-      function placeSessionInColumn(session) {
-        const { column } = session
-        const colMap = sessionMap[column]
-                   || (sessionMap[column] = {})
-        colMap[session.row] = session
       }
     }
   }
 
 
-  const getBlocked = (unavailable, inconvenient) => {
-
-  }
-
-
-  day_begin   = getTimeArray(day_begin)
-  day_end     = getTimeArray(day_end)
-  weekdays    = getWeekdays(language)
-  const blocked  = getBlocked(unavailable, inconvenient)
-  const sessions = getSessions()
-
-  // We want to know:
-  // * which day-column and
-  // * which time-line each session should appear in
-  // * what colour it should be
-  // * what text it should show
-  // * what link url it should open
-
+  const weekdays = getWeekdays()
+  day_begin = getTimeArray(day_begin)
+  day_end = getTimeArray(day_end)
+  const sessions = getSessions() || []
   // console.log("sessions:", sessions);
-  // _id:          "C3jRYE8B44iGSyXSr"
-  // billed:       false
-  // colour:       "#909"
-  // column:       3
-  // date:         ""
-  // day:          4
-  // height:       10
-  // index:        2
-  // row:          114
-  // session_begin: 17.2
-  // session_end:   18.1
-  // supplement:   false
-  // tentative:    false
-  // link:         <url>
+
 
   return {
+    weekdays,
     day_begin,
     day_end,
-    weekdays,
+    midnight,
+    monday,
+    day,
     sessions,
-    // today,
     daysToDisplay
   }
 }

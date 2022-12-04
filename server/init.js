@@ -95,11 +95,19 @@ function populateFromJSON(name) {
         const keys = Object.keys(doc)
                            .filter( key => key.includes("date"))
 
+        // const name = doc["name-remove-later"]
+
         keys.forEach( key => {
           let date = doc[key]
           if (date) {
-            date = new Date(new Date(doc[key]).setHours(0,0,0,0))
-            doc[key] = date.toISOString()
+            doc[key] = new Date(date)
+
+            // if (name) {
+            //   console.log("doc:", name);    
+            //   console.log("date:", date);
+            //   console.log("doc[key]:", doc[key]);
+            //   console.log("")
+            // }
           }
         })
       }

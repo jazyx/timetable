@@ -5,13 +5,16 @@ import React, {
 } from 'react'
 
 import collections from '/imports/api/collections'
-import { removeFrom } from '/imports/tools/utilities'
+import {
+  removeFrom,
+  getTimeValues,
+} from '/imports/tools/utilities'
+
 import methods from '/imports/api/methods/'
-console.log("TimetableContext methods:", methods);
-
-
 const { addTimeZone } = methods
 
+
+let renders = 0
 
 
 export const TimetableContext = createContext()
@@ -19,16 +22,39 @@ export const TimetableContext = createContext()
 
 export const TimetableProvider = ({children}) => {
   const [ ready, setReady ] = useState(false)
+
+  // Prepare to get 00:00 this morning, and 00:00 on Monday
+  // in the timezone of the OS. Use placeholder dates until
+  // setDateValues() useEffect is triggered.
   const [ timeZone, setTimeZone ] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   ) // "Europe/Moscow"
+  const [ midnight, setMidnight ] = useState(new Date())
+  const [ monday, setMonday ] = useState(new Date())
+  const [ day, setDay ] = useState(0)
+
+  const [ endTime, setEndTime ] = useState(new Date())
 
   const [ daysToDisplay, setDaysToDisplay ] = useState(8)
 
-  // Get 00:00 this morning, in the timezone of the OS
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
+  const setDateValues = () => {
+    const { midnight, monday, day} = getTimeValues(timeZone)
+    setMidnight(midnight)
+    setMonday(monday)
+    setDay(day)
 
+    const addMS = daysToDisplay * 24 * 60 * 60 * 1000
+    const endTime = new Date(midnight.getTime() + addMS)
+    setEndTime(endTime)
+    // console.log("renders:", renders++);
+    // console.log("timeZone:", timeZone);
+    // console.log("midnight:", midnight);
+    // console.log("monday:", monday);
+  }
+
+  useEffect(setDateValues, [ timeZone ])
+  // TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE >>> //
 
 
   // <<< SUBSCRIBE / SUBSCRIBE / SUBSCRIBE / SUBSCRIBE //
@@ -65,7 +91,10 @@ export const TimetableProvider = ({children}) => {
     <TimetableContext.Provider
       value={{
         ready, // set to true when core collections are online
-        today,
+        midnight,
+        monday,
+        day,
+        endTime,
         daysToDisplay,
         setDaysToDisplay,
         timeZone,

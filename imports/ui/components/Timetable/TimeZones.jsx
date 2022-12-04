@@ -1,5 +1,7 @@
 /**
- *
+ * TimeZones.jsx
+ * 
+ * Creates a selector for choosing a timeZone
  */
 
 
@@ -23,13 +25,13 @@ const TimeZoneTracker = () => {
   return {
     timeZones
   }
-} 
+}
 // TRACKER // TRACKER // TRACKER // TRACKER // TRACKER >>> //
 
 
 
 export const TimeZones = () => {
-  const { timeZone } = useContext(TimetableContext)
+  const { timeZone, setTimeZone } = useContext(TimetableContext)
   const { timeZones } = useTracker(TimeZoneTracker)
   // console.log("TimeZones props:", props);
   // [ { _id: "5YAwQg8mG5c8652wb",
@@ -41,7 +43,7 @@ export const TimeZones = () => {
   const continents = []
   const now = new Date()
   const zones = []
-  
+
   const rawZones = timeZones.map(({ timeZone }) => {
     const zoneString = now.toLocaleString(
       'en-GB', { timeZone }
@@ -78,16 +80,24 @@ export const TimeZones = () => {
   if (continents.length === 1) {
     zones.shift()
   }
-  
+
+
+  const updateTimeZone = (event) => {
+    const value = event.target.value
+    setTimeZone(value)
+  }
+
+
   return (
     <select
-      defaultValue={timeZone}
+      value={timeZone}
+      onChange={updateTimeZone}
     >
       { zones }
     </select>
   )
-} 
- 
+}
+
 
 
 function byTimeAndZoneName(a, b) {

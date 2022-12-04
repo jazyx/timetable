@@ -19,16 +19,19 @@ import { Session } from '../Timetable/Session'
  
 export const Grid = (props) => {
   const {
-    days,
+    midnight,
+    monday,
+    day,
     day_begin,
     day_end,
+    daysToDisplay,
     weekdays,
     sessions,
     blocked={}
   } = props
  
-  const today = new Date().getDay()
-  const period = new Array(days).fill(0)
+  const today = 1 // HARD-CODED to start week on Monday
+  const period = new Array(daysToDisplay).fill(0)
                                 .map((_, index) => (
                                   weekdays[(today + index) % 7]
                                 ))
@@ -38,8 +41,11 @@ export const Grid = (props) => {
   const rows = (day_end[0] - day_begin[0]) * 12
              - (day_begin[1] || 0)
              + (day_end[1] || 0)
+             || 0
 
 
+  console.log("Grid sessions:", sessions);
+  
   const grid = period.reduce(buildGrid, [])
  
  
@@ -54,7 +60,7 @@ export const Grid = (props) => {
   );
  
  
-  function buildGrid(week, day, dayIndex) {
+  function buildGrid(grid, day, dayIndex) {
     const weekDay = dayIndex % 7
     const daySessions  = sessions[weekDay] || []
     const blockedCells = blocked[weekDay] || {}
@@ -143,8 +149,8 @@ export const Grid = (props) => {
       </div>
     )
  
-    week.push(dayLines)
-    return week
+    grid.push(dayLines)
+    return grid
   }
 };
  
