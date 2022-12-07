@@ -9,12 +9,14 @@
 
 import React from 'react';
 
+
 import {
   StyledWeek,
   StyledTime,
   StyledCell
 } from '../Timetable/Styles'
 import { Session } from '../Timetable/Session'
+
 
 
 export const Grid = (props) => {
@@ -24,47 +26,39 @@ export const Grid = (props) => {
     rows,
     sessions,
     weekdays,
-    
-    daysToDisplay,
 
-    midnight,
+    daysToDisplay,
+    timeZone,
     monday,
+
+    // midnight,
     day,
 
     blocked={}
   } = props
 
-  const today = 1 // HARD-CODED to start week on Monday
-  const period = new Array(daysToDisplay).fill(0)
-                                .map((_, index) => (
-                                  weekdays[(today + index) % 7]
-                                ))
+  // console.log("Grid sessions:", sessions);
 
-  console.log("Grid sessions:", sessions);
-
-  const grid = period.reduce(buildGrid, [])
+  const grid = sessions.reduce(buildGrid, [])
 
 
   return (
     <StyledWeek
      hourLine={hourLine}
      rows={rows}
-     columns={7}
+     columns={daysToDisplay}
    >
      {grid}
    </StyledWeek>
   );
 
 
-  function buildGrid(grid, day, dayIndex) {
-    const weekDay = dayIndex % 7
-    const daySessions  = sessions[weekDay] || []
-    const blockedCells = blocked[weekDay] || {}
-
-    // console.log("day:", day, "daySessions:", daySessions);
-    // day: <Abbr>
-    // daySessions: {
-    //   <line number> {
+  function buildGrid(grid, daySessions, dayIndex) {
+    // console.log("daySessions:", daySessions);
+    // daySessions: [
+    //   "Mon 5 Dec",
+    //   ...,
+    //   {
     //     _id:           <id string>
     //     bg_colour:     <string Class hex colour>
     //     billed:        <boolean>
@@ -82,22 +76,26 @@ export const Grid = (props) => {
     //     supplement:    <boolean
     //     tentative:     <boolean
     //     unscheduled:   <boolean
-    // }, ...}
+    // }, ...]
+
+    // const blockedCells = blocked[weekDay] || {}
+
+    const date = daySessions[0]
 
     let hour = firstHour
-    console.log("hour:", hour);
 
     const timelessColumn = (dayIndex + 1) % 3
 
-    const lines = new Array(rows + 1).fill(0).map((_, index) => {
-      const key     = `${day}_${index}`
+    const lines = new Array(rows + 1).fill(0)
+                                     .map((_, index) => {
+      const key     = `${date}_${index}`
       const time    = ((index - hourLine) % 12 || timelessColumn)
                     ? ""
                     : (hour ++) % 24
 
       const content = index
                     ? ""
-                    : day
+                    : date
       const sessionData = daySessions[index] || 0
       const sessionChild = sessionData
                          ? (

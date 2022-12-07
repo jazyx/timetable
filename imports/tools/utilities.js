@@ -48,7 +48,15 @@ export const tweenColor = (color1, color2, ratio) => {
 }
 
 
-
+/**
+ * Multiplies the rgb values of color by ratio, in the range
+ * 0 - 255.
+ *
+ * E.g. toneColor("#cc8844 ", 0.5)
+ * // "#642"
+ * toneColor("#c84", 2.0)
+ * // "#ffff88"
+ */
 export const toneColor = (color, ratio) => {
   const prefix = color[0] === "#"
 
@@ -922,7 +930,8 @@ export const getTimeBetween = (date1, date2) => {
 
 /**
  * Returns {
- *   hour: <integer>
+ *   day:    <integer 0 - 6>
+ *   hour:   <integer>
  *   minute: <integer>
  * }
  */
@@ -935,12 +944,17 @@ export const getZoneTime = (dateTime, timeZone) => {
     isoString = dateTime.toLocaleString("en-GB")
   }
 
-  const [ , time ] = isoString.split(", ")
+  let [ date, time ] = isoString.split(", ")
   let [ hour, minute ] = time.split(":")
   hour = hour * 1
   minute = minute * 1
 
+  let [ day, month, year ] = date.split("/")
+  date = `${year}-${month}-${day}`
+  day = new Date(date).getDay() // 0 = Sunday, 6 = Saturday.
+
   return {
+    day,
     hour,
     minute
   }
@@ -996,4 +1010,31 @@ export const getZoneTime = (dateTime, timeZone) => {
   }
 
   return (sessionHour - beginHour) * 12 + sessionSlot - beginSlot
+}
+
+
+/**
+ * Returns a date like Mon 5 Dec
+ */
+export const getLocalDate = (date, daysLater, timeZone) => {
+  const msLater = daysLater * 24 * 60 * 60 * 1000
+  const newDate = new Date(date.getTime() + msLater)
+  const options = {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone
+  }
+  let isoString
+  try {
+    isoString = newDate.toLocaleString( "en-GB", options )
+  } catch(error) {
+    delete options.timeZone
+    // Use locale timeZone by default if timeZone is invalid
+    isoString = newDate.toLocaleString("en-GB", options)
+  }
+
+  isoString = isoString.replace(",", "")
+
+  return isoString
 }

@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from "styled-components"
-import { translucify } from '/imports/tools/utilities.js'
+import {
+  translucify,
+  toneColor
+} from '/imports/tools/utilities.js'
 
 
 const StyledSession = styled.div`
@@ -20,11 +23,17 @@ const StyledSession = styled.div`
     props.unscheduled
     ? translucify(props.bg_colour, 0.5)
     : "inherit"
-  )};;
+  )};
+  ${props => props.dated
+           ? `border: inset 2px #999};`
+           : ""
+  }
 `
 
 export const Session = (props) => {
   // const { height, colour, link } = props
+  // console.log("SessionChild props:", props);
+  
 
   if (!props.height) {
     return ""

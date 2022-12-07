@@ -27,7 +27,7 @@ export const StyledWeek = styled.div`
       // --columns: ${props => props.columns};
       // --borders: calc((var(--columns) + 3)px);
       // width: calc((100vw - var(--borders)) / var(--columns));
-      width: calc((100vw - 10px) / 7);
+      width: calc((100vw - 10px) / 8);
     }
 
     & > div {

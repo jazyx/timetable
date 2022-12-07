@@ -35,9 +35,10 @@ export const Teacher = () => {
   //   rows,
   //   sessions,
   //   weekdays,
-  //   
-  //   midnight,
+  //   timeZone,
   //   monday,
+  //
+  // // midnight,
   //   day,
   //   daysToDisplay
   // OR

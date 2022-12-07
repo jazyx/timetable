@@ -18,20 +18,22 @@ import {
   getTimeBetween,
   getTimeSlot,
   getMinuteSlot,
-  getZoneTime
+  getZoneTime,
+  getLocalDate
 } from '/imports/tools/utilities'
 
 
 
 export const TeacherTracker = (teacher_name) => {
   const {
-    midnight,
+    // midnight,
     monday,
-    day,
     endTime,
-    daysToDisplay,
+    day,
+    // daysToDisplay,
     timeZone
   } = useContext(TimetableContext)
+  let daysToDisplay
 
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
@@ -71,15 +73,6 @@ export const TeacherTracker = (teacher_name) => {
     unavailable,
     inconvenient
   } = teacherData
-
-
-
-  const getTimeArray = (decimal) => {
-    const hour = parseInt(decimal, 10)
-    const line = Math.round((decimal % 1 * 100) % 60 / 5)
-
-    return [ hour, line ]
-  }
 
 
   const getWeekdays = () => {
@@ -141,10 +134,37 @@ export const TeacherTracker = (teacher_name) => {
   }
 
 
+  const getTreatedSessionsMap = () => {
+    // [<week integer>: {
+    //   <class_id>: [<integer index>, ...]
+    // }, ...]
+    const treated = []
+    const sessions = []
+
+    const { days } = getTimeBetween(monday, endTime)
+    daysToDisplay = days
+    const weeks = Math.ceil(days / 7)
+
+    for(let ii = 0; ii < weeks; ii += 1) {
+      treated[ii] = {}
+    }
+
+    for(let ii = 0; ii < days; ii += 1) {
+      const localDate = getLocalDate(monday, ii, timeZone)
+      sessions[ii] = [localDate]
+    }
+
+    return {
+      treated,
+      sessions
+    }
+  }
+
+
   const getSessions = () => {
     const classes = getClasses()
-    const treated = {}
-    return classes.reduce(getSessionMap, {})
+    const { treated, sessions } = getTreatedSessionsMap()
+    return classes.reduce(getSessionMap, sessions)
 
     function getSessionMap(sessionMap, classDoc) {
       // { "name":            <string>
@@ -176,14 +196,12 @@ export const TeacherTracker = (teacher_name) => {
           }}
         ]}
       ]}
-      const sessions = Session.find(query)
-                              .fetch()
+      Session.find(query)
+             .fetch()
       // Order chronologically, with precisely dated sessions first
-                              .sort(byDateBeginDay)
-                              .forEach(placeSession)
+             .sort(byDateBeginDay)
+             .forEach(placeSession) // updates sessionMap
 
-      // console.log("treated:", treated);
-      // console.log("sessions", JSON.stringify(sessions, null, '  '));
       return sessionMap
 
 
@@ -208,37 +226,84 @@ export const TeacherTracker = (teacher_name) => {
 
 
       function placeSession(session) {
+        if (session.date) {
+          placeDatedSession(session)
+        } else if (session.repeat_from_date) {
+          placeRepeatingSessions(session)
+        }
+      }
+
+
+      function placeDatedSession(session) {
         const {
-          _id,
           date,
-          repeat_from_date,
           duration,
           index,
         } = session
 
         const height = duration / 5
 
-        if (date) {
-          // Place this dated session
-          const { days: column } = getTimeBetween(monday, date)
-          const daySlot  = sessionMap[column]
-                       || (sessionMap[column] = {})
-          const row = getTimeSlot(day_begin, date) + 1
-          daySlot[row] = {
-            ...session,
-            ...classDoc,
-            column,
-            row,
-            height,
-          }
-
-          // Remember which week it was placed in.
-          const week      = parseInt(column / 7)
-          const weekSlot  = treated[week] || (treated[week] = {})
-          const classSlot = weekSlot[class_id]
-                        || (weekSlot[class_id] = [])
-          classSlot.push(index)
+        // Place this dated session
+        const { days: column } = getTimeBetween(monday, date)
+        // <<< WET // WET // WET // WET // WET // WET //
+        const daySlot  = sessionMap[column]
+                      || (sessionMap[column] = {})
+        // + 1 allows for a header cell
+        const row = getTimeSlot(day_begin, date) + 1
+        daySlot[row] = {
+          ...session,
+          ...classDoc,
+          column,
+          row,
+          height,
+          dated: true
         }
+        // WET // WET // WET // WET // WET // WET >>>//
+
+        // Remember which week it was placed in.
+        const week      = parseInt(column / 7)
+        const weekSlot  = treated[week] || (treated[week] = {})
+        const classSlot = weekSlot[class_id]
+                      || (weekSlot[class_id] = [])
+        classSlot.push(index)
+      }
+
+
+      function placeRepeatingSessions(session) {
+        // Place this session repeatedly, during the period from
+        // monday to endTime. This means determining which columns
+        // represent the
+
+        const {
+          repeat_from_date,
+          duration,
+          index,
+        } = session
+
+        const height = duration / 5
+        // Determine which day of the week the repeating session
+        // is expected
+        const { day } = getZoneTime(repeat_from_date, timeZone)
+        const offset = (day + 6) % 7 // 0 for Monday
+
+        treated.forEach((week, weekIndex) => {
+          const datedSessionIndices = week[class_id] || []
+          if (datedSessionIndices.indexOf(index) < 0) {
+            const column  = weekIndex * 7 + offset
+            // <<< WET // WET // WET // WET // WET // WET //
+            const daySlot = sessionMap[column]
+                        || (sessionMap[column] = {})
+            const row = getTimeSlot(day_begin,repeat_from_date)+1
+            daySlot[row] = {
+              ...session,
+              ...classDoc,
+              column,
+              row,
+              height,
+            }
+            // WET // WET // WET // WET // WET // WET >>>//
+          }
+         })
       }
     }
   }
@@ -261,9 +326,10 @@ export const TeacherTracker = (teacher_name) => {
     sessions,
     weekdays,
     daysToDisplay,
-
-    midnight,
+    timeZone,
     monday,
+
+    // midnight,
     day
   }
 }
