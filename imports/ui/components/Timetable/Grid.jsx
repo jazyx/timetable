@@ -8,47 +8,43 @@
  */
 
 import React from 'react';
- 
+
 import {
   StyledWeek,
   StyledTime,
   StyledCell
 } from '../Timetable/Styles'
 import { Session } from '../Timetable/Session'
- 
- 
+
+
 export const Grid = (props) => {
   const {
+    firstHour,
+    hourLine,
+    rows,
+    sessions,
+    weekdays,
+    
+    daysToDisplay,
+
     midnight,
     monday,
     day,
-    day_begin,
-    day_end,
-    daysToDisplay,
-    weekdays,
-    sessions,
+
     blocked={}
   } = props
- 
+
   const today = 1 // HARD-CODED to start week on Monday
   const period = new Array(daysToDisplay).fill(0)
                                 .map((_, index) => (
                                   weekdays[(today + index) % 7]
                                 ))
 
-  const hourLine = (12 - (day_begin[1] || 12))
- 
-  const rows = (day_end[0] - day_begin[0]) * 12
-             - (day_begin[1] || 0)
-             + (day_end[1] || 0)
-             || 0
-
-
   console.log("Grid sessions:", sessions);
-  
+
   const grid = period.reduce(buildGrid, [])
- 
- 
+
+
   return (
     <StyledWeek
      hourLine={hourLine}
@@ -58,13 +54,13 @@ export const Grid = (props) => {
      {grid}
    </StyledWeek>
   );
- 
- 
+
+
   function buildGrid(grid, day, dayIndex) {
     const weekDay = dayIndex % 7
     const daySessions  = sessions[weekDay] || []
     const blockedCells = blocked[weekDay] || {}
-    
+
     // console.log("day:", day, "daySessions:", daySessions);
     // day: <Abbr>
     // daySessions: {
@@ -87,16 +83,18 @@ export const Grid = (props) => {
     //     tentative:     <boolean
     //     unscheduled:   <boolean
     // }, ...}
- 
-    const useStart = !hourLine
-    let hour = day_begin[0] + !useStart
+
+    let hour = firstHour
+    console.log("hour:", hour);
+
     const timelessColumn = (dayIndex + 1) % 3
- 
+
     const lines = new Array(rows + 1).fill(0).map((_, index) => {
       const key     = `${day}_${index}`
       const time    = ((index - hourLine) % 12 || timelessColumn)
                     ? ""
-                    : hour++
+                    : (hour ++) % 24
+
       const content = index
                     ? ""
                     : day
@@ -108,19 +106,15 @@ export const Grid = (props) => {
                              />
                            )
                          : ""
- 
-      // if (sessionChild) {
-      //   console.log("sessionChild:", sessionChild);
-      // }
- 
+
       if (content) {
         return (
           <div
             key={key}
           >{content}</div>
         )
- 
-      } else if (time) {
+
+      } else if (time !== "") {
         return (
           <StyledTime
             key={key}
@@ -129,7 +123,7 @@ export const Grid = (props) => {
             {sessionChild}
           </StyledTime>
         )
- 
+
       } else  {
         return (
           <StyledCell
@@ -140,7 +134,7 @@ export const Grid = (props) => {
         )
       }
     })
- 
+
     const dayLines = (
       <div
         key={day+dayIndex} // TODO: Use date
@@ -148,9 +142,8 @@ export const Grid = (props) => {
         {lines}
       </div>
     )
- 
+
     grid.push(dayLines)
     return grid
   }
 };
- 

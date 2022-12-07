@@ -15,7 +15,10 @@ const {
 } = collections
 
 import {
-  getTimeBetween
+  getTimeBetween,
+  getTimeSlot,
+  getMinuteSlot,
+  getZoneTime
 } from '/imports/tools/utilities'
 
 
@@ -27,19 +30,32 @@ export const TeacherTracker = (teacher_name) => {
     day,
     endTime,
     daysToDisplay,
+    timeZone
   } = useContext(TimetableContext)
 
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
+  //   "_id":         "AiuEdtgtGJXXSZDak",
   //   "name":        "James",
   //   "password":    "TIiudhtm11LE",
   //   "language":    "en",
   //   "rate":        2000,
-  //   "day_begin":   7.3,
-  //   "day_end":     20.3,
-  //   "_id":         "AiuEdtgtGJXXSZDak"
-  //   "unavailable": { <day>: [[<start_time>, <end_time>], ...], ...}
-  //   "inconvenient":{ <day>: [[<start_time>, <end_time>], ...], ...}
+  //   "day_begin":   <Date string, time with day>,
+  //   "day_end":     <Date string, only time used>,
+  //   "unavailable": [
+  //     [
+  //       <Date string (start)>,
+  //       <Date string (end)>,
+  //       <string description>
+  //     ], ...
+  //   ]
+  //   "inconvenient":[
+  //     [
+  //       <Date string (start)>,
+  //       <Date string (end)>,
+  //       <string description>
+  //     ], ...
+  //   ]
   // }
 
   if (!teacherData) {
@@ -207,13 +223,7 @@ export const TeacherTracker = (teacher_name) => {
           const { days: column } = getTimeBetween(monday, date)
           const daySlot  = sessionMap[column]
                        || (sessionMap[column] = {})
-          // Round time to nearest 5 minute block
-          const minutes = Math.floor(date.getMinutes() / 5) * 0.05
-          const time = date.getHours() + minutes // x.0 - x.55
-          const begin  = getTimeArray(time) // [17, 0]
-          // Place session in appropriate row
-          const row    = (begin[0] - day_begin[0]) * 12
-                        + begin[1] - day_begin[1] + 1
+          const row = getTimeSlot(day_begin, date) + 1
           daySlot[row] = {
             ...session,
             ...classDoc,
@@ -234,21 +244,26 @@ export const TeacherTracker = (teacher_name) => {
   }
 
 
-  const weekdays = getWeekdays()
-  day_begin = getTimeArray(day_begin)
-  day_end = getTimeArray(day_end)
+  const hourLine = getMinuteSlot(day_begin, timeZone)
+  let { hour: firstHour } = getZoneTime(day_begin, timeZone)
+  firstHour += !!hourLine
+
+  const rows = getTimeSlot(day_begin, day_end)
   const sessions = getSessions() || []
+  const weekdays = getWeekdays()
   // console.log("sessions:", sessions);
 
 
   return {
+    firstHour,
+    hourLine,
+    rows,
+    sessions,
     weekdays,
-    day_begin,
-    day_end,
+    daysToDisplay,
+
     midnight,
     monday,
-    day,
-    sessions,
-    daysToDisplay
+    day
   }
 }

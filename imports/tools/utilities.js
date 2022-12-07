@@ -825,6 +825,13 @@ export const getElementIndex = (element, parentTag) => {
 
 // DATE AND TIME //
 
+/**
+ * Returns {
+ *   midnight: <Date object for 00:00 in given time zone>,
+ *   monday:   <Date object for 00:00 on most recent Monday>
+ *   day:      <0 - 6: week day at midnight this morning>
+ * }
+ */
 export const getTimeValues = (timeZone) => {
   // Get the current time in GMT
   const now = new Date()
@@ -842,6 +849,7 @@ export const getTimeValues = (timeZone) => {
 
   // This isoString does not include milliseconds, so we need
   // to ask for them specifically. We multiply by * 1 to convert
+  // a string to a number (as we also do with minute and second
   // a string to a number (as we also do with minute and second
   // below).
   const decimals = now.toLocaleString(
@@ -882,6 +890,15 @@ export const getTimeValues = (timeZone) => {
 }
 
 
+/**
+ * Returns {
+ *   days:    <integer>,
+ *   hours:   <integer>,
+ *   minutes: <integer>,
+ *   seconds: <integer>,
+ *   ms:      <integer>
+ * } between the two dates
+ */
 export const getTimeBetween = (date1, date2) => {
   if (!date2) {
     date2 = new Date()
@@ -900,4 +917,83 @@ export const getTimeBetween = (date1, date2) => {
   return {
     days, hours, minutes, seconds, ms
   }
+}
+
+
+/**
+ * Returns {
+ *   hour: <integer>
+ *   minute: <integer>
+ * }
+ */
+export const getZoneTime = (dateTime, timeZone) => {
+  let isoString
+  try {
+    isoString = dateTime.toLocaleString( "en-GB", { timeZone })
+  } catch(error) {
+    // Use locale timeZone by default if timeZone is invalid
+    isoString = dateTime.toLocaleString("en-GB")
+  }
+
+  const [ , time ] = isoString.split(", ")
+  let [ hour, minute ] = time.split(":")
+  hour = hour * 1
+  minute = minute * 1
+
+  return {
+    hour,
+    minute
+  }
+}
+
+
+/**
+ * Returns an integer between 0 and 11
+ * (0-4minutes,59seconds - 55minutes-59minutes,59seconds)
+ *
+ * For most time zones, the minutes are the same as GMT,
+ * but "America/St_Johns" (for example) is at 3:30 after
+ * GMT, so the time zone may be important.
+ */
+ export const getMinuteSlot = (dateTime, timeZone) => {
+  let isoString
+  try {
+    isoString = dateTime.toLocaleString( "en-GB", { timeZone })
+  } catch(error) {
+    // Use locale timeZone by default if timeZone is invalid
+    isoString = dateTime.toLocaleString("en-GB")
+  }
+
+  const [ , time ] = isoString.split(", ") // HH:MM:SS.xxx
+  const [ , minute ] = time.split(":")     // MM
+  const slot = Math.floor(minute / 5)      // 0 - 11
+
+  return slot
+}
+
+
+/**
+ * Returns the integer number of 5-minute slots between
+ * beginAt and sessionTime, after rounding both of these
+ * down to the nearest 5-minute starting time.
+ *
+ * Day information is ignored. Time zone information is also
+ * ignored, because the _interval_ between times is important,
+ * not the _exact_ time.
+ */
+ export const getTimeSlot = (beginAt, sessionTime) => {
+  // Number of complete 5-minute segments after the hour
+  const sessionSlot = Math.floor(sessionTime.getMinutes() / 5)
+  const sessionHour = sessionTime.getHours()
+
+  const beginSlot   = Math.floor(beginAt.getMinutes() / 5)
+  let beginHour   = beginAt.getHours()
+
+  // Ensure that beginHour is before sessionHour, regardless
+  // of the day.
+  while (beginHour > sessionHour) {
+    beginHour -= 24
+  }
+
+  return (sessionHour - beginHour) * 12 + sessionSlot - beginSlot
 }

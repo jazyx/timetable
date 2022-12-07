@@ -93,7 +93,9 @@ function populateFromJSON(name) {
 
       function convertDates(doc) {
         const keys = Object.keys(doc)
-                           .filter( key => key.includes("date"))
+                           .filter( key => (
+                            key.includes("date") || key.includes("day_")
+                           ))
 
         // const name = doc["name-remove-later"]
 

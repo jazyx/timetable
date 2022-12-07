@@ -30,13 +30,15 @@ export const Teacher = () => {
   const props = useTracker(() => TeacherTracker(teacher_name))
   // {
   //   blocked, <<<<
+  //   firstHour,
+  //   hourLine,
+  //   rows,
+  //   sessions,
   //   weekdays,
-  //   day_begin,
-  //   day_end,
+  //   
   //   midnight,
   //   monday,
   //   day,
-  //   sessions,
   //   daysToDisplay
   // OR
   //   error
