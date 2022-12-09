@@ -7,7 +7,7 @@ import styled from "styled-components"
  *    columns:  integer number of columns
  *  }
  */
-export const StyledWeek = styled.div`
+export const StyledGrid = styled.div`
   --full-height: 85vh; /* TO BE CALCULATED */
   --line-color: #666;
   --even-color: #ffffff08;
@@ -15,6 +15,11 @@ export const StyledWeek = styled.div`
 
   border: 2px solid var(--line-color);
   display: flex;
+  pointer-events: none;
+
+  &.dragging {
+    pointer-events: all;
+  }
 
   & * {
     box-sizing: border-box;
@@ -43,6 +48,11 @@ export const StyledWeek = styled.div`
 
     & > div:nth-child(even) {
       background-color: var(--even-color);
+    }
+
+    // TEMPORARY // TEMPORARY // TEMPORARY // TEMPORARY //
+    & > div.over {
+      background-color: #9009;
     }
 
     & > div:nth-child(12n+${props => props.hourLine + 1}) {

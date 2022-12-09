@@ -34,17 +34,11 @@ export const Teacher = () => {
   //   hourLine,
   //   rows,
   //   sessions,
-  //   weekdays,
-  //   timeZone,
-  //   monday,
-  //
-  // // midnight,
-  //   day,
   //   daysToDisplay
   // OR
   //   error
   // }
-  if (!props.weekdays) {
+  if (!props.sessions) {
     return <h1>{props.error || "Loading..."}</h1>
   }
 

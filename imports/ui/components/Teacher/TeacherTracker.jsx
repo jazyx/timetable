@@ -26,11 +26,8 @@ import {
 
 export const TeacherTracker = (teacher_name) => {
   const {
-    // midnight,
     monday,
     endTime,
-    day,
-    // daysToDisplay,
     timeZone
   } = useContext(TimetableContext)
   let daysToDisplay
@@ -73,25 +70,6 @@ export const TeacherTracker = (teacher_name) => {
     unavailable,
     inconvenient
   } = teacherData
-
-
-  const getWeekdays = () => {
-    const l10n = L10n.findOne({ code: language }, { d: 1 })
-    if ( l10n && l10n.d ) {
-      return l10n.d
-
-    } else { // use English by default, starting with Monday
-      return [
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
-        "Sun"
-      ]
-    }
-  }
 
 
   // Get _ids of contracts signed with the current teacher
@@ -315,7 +293,6 @@ export const TeacherTracker = (teacher_name) => {
 
   const rows = getTimeSlot(day_begin, day_end)
   const sessions = getSessions() || []
-  const weekdays = getWeekdays()
   // console.log("sessions:", sessions);
 
 
@@ -324,12 +301,6 @@ export const TeacherTracker = (teacher_name) => {
     hourLine,
     rows,
     sessions,
-    weekdays,
-    daysToDisplay,
-    timeZone,
-    monday,
-
-    // midnight,
-    day
+    daysToDisplay
   }
 }

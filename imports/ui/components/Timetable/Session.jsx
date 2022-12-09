@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components"
+import { TimetableContext } from '../../contexts/TimetableContext';
 import {
   translucify,
   toneColor
 } from '/imports/tools/utilities.js'
+
+
+
 
 
 const StyledSession = styled.div`
@@ -28,20 +32,30 @@ const StyledSession = styled.div`
            ? `border: inset 2px #999};`
            : ""
   }
+  pointer-events: all;
+  cursor: pointer;
+
+  &.dragged {
+    opacity: 0.3333;
+  }
 `
 
 export const Session = (props) => {
-  // const { height, colour, link } = props
-  // console.log("SessionChild props:", props);
-  
-
   if (!props.height) {
     return ""
   }
 
+
+  const {
+    dragStart,
+  } = useContext(TimetableContext)
+
+
   return (
     <StyledSession
       { ...props }
+      draggable
+      onDragStart={dragStart}
     >
       {props.name}
     </StyledSession>

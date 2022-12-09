@@ -7,11 +7,12 @@
  * - Earliest and latest times depend on expected session times
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
+import { TimetableContext } from '../../contexts/TimetableContext';
 
 
 import {
-  StyledWeek,
+  StyledGrid,
   StyledTime,
   StyledCell
 } from '../Timetable/Styles'
@@ -21,18 +22,17 @@ import { Session } from '../Timetable/Session'
 
 export const Grid = (props) => {
   const {
+    dragOver,
+    dragLeave,
+    drop
+  } = useContext(TimetableContext)
+
+  const {
     firstHour,
     hourLine,
     rows,
     sessions,
-    weekdays,
-
     daysToDisplay,
-    timeZone,
-    monday,
-
-    // midnight,
-    day,
 
     blocked={}
   } = props
@@ -43,13 +43,14 @@ export const Grid = (props) => {
 
 
   return (
-    <StyledWeek
+    <StyledGrid
+     id="grid"
      hourLine={hourLine}
      rows={rows}
      columns={daysToDisplay}
    >
      {grid}
-   </StyledWeek>
+   </StyledGrid>
   );
 
 
@@ -117,6 +118,9 @@ export const Grid = (props) => {
           <StyledTime
             key={key}
             before={time}
+            onDragOver={dragOver}
+            onDragLeave={dragLeave}
+            onDrop={drop}
           >
             {sessionChild}
           </StyledTime>
@@ -126,6 +130,9 @@ export const Grid = (props) => {
         return (
           <StyledCell
             key={key}
+            onDragOver={dragOver}
+            onDragLeave={dragLeave}
+            onDrop={drop}
           >
             {sessionChild}
           </StyledCell>
@@ -135,7 +142,7 @@ export const Grid = (props) => {
 
     const dayLines = (
       <div
-        key={day+dayIndex} // TODO: Use date
+        key={date}
       >
         {lines}
       </div>
