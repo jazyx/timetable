@@ -11,10 +11,10 @@ import React, { useContext } from 'react';
 import { TimetableContext } from '../../contexts/TimetableContext';
 
 
+// Styled Components
 import {
   StyledGrid,
-  StyledTime,
-  StyledCell
+  StyledSlot
 } from '../Timetable/Styles'
 import { Session } from '../Timetable/Session'
 
@@ -22,8 +22,9 @@ import { Session } from '../Timetable/Session'
 
 export const Grid = (props) => {
   const {
+    dragEnter,
     dragOver,
-    dragLeave,
+    dragEnd,
     drop
   } = useContext(TimetableContext)
 
@@ -35,9 +36,8 @@ export const Grid = (props) => {
     daysToDisplay,
 
     blocked={}
-  } = props
+  } = props // from TeacherTracker.jsx
 
-  // console.log("Grid sessions:", sessions);
 
   const grid = sessions.reduce(buildGrid, [])
 
@@ -52,6 +52,9 @@ export const Grid = (props) => {
      {grid}
    </StyledGrid>
   );
+
+
+  // BUILD GRID // BUILD GRID // BUILD GRID // BUILD GRID //
 
 
   function buildGrid(grid, daySessions, dayIndex) {
@@ -81,74 +84,71 @@ export const Grid = (props) => {
 
     // const blockedCells = blocked[weekDay] || {}
 
-    const date = daySessions[0]
+    const date = daySessions[0] // Ex: Mon 5 Dec
+    const timelessColumn = (dayIndex + 1) % 2
 
     let hour = firstHour
+    let lockedSlots = 0
 
-    const timelessColumn = (dayIndex + 1) % 3
-
-    const lines = new Array(rows + 1).fill(0)
-                                     .map((_, index) => {
+    // <<< DAY SLOTS // DAY SLOTS // DAY SLOTS // DAY SLOTS //
+    // Create an array of time slots for a given day, one for
+    // each 5-minute period from day_begin to day_end.
+    const daySlots = new Array(rows + 1).fill(0)
+                                        .map((_, index) => {
       const key     = `${date}_${index}`
       const time    = ((index - hourLine) % 12 || timelessColumn)
                     ? ""
-                    : (hour ++) % 24
+                    : (hour++) % 24
 
-      const content = index
-                    ? ""
-                    : date
+      // Prepare sessionData ... if present in this cell
       const sessionData = daySessions[index] || 0
-      const sessionChild = sessionData
-                         ? (
-                             <Session
-                               {...sessionData}
-                             />
-                           )
-                         : ""
+      let sessionChild
+      if (sessionData) {
+        sessionChild = <Session {...sessionData} />
+        lockedSlots = sessionData.height
+      }
 
-      if (content) {
+      let className
+      if (lockedSlots) {
+        lockedSlots--
+        className = "locked"
+      }
+
+      if (!index) { // first row shows date
         return (
           <div
             key={key}
-          >{content}</div>
+          >{date}</div>
         )
 
-      } else if (time !== "") {
+      } else { // time slots
         return (
-          <StyledTime
+          <StyledSlot
             key={key}
             before={time}
             onDragOver={dragOver}
-            onDragLeave={dragLeave}
+            onDragEnter={dragEnter}
+            onDragEnd={dragEnd}
             onDrop={drop}
+            className={className}
           >
             {sessionChild}
-          </StyledTime>
-        )
-
-      } else  {
-        return (
-          <StyledCell
-            key={key}
-            onDragOver={dragOver}
-            onDragLeave={dragLeave}
-            onDrop={drop}
-          >
-            {sessionChild}
-          </StyledCell>
+          </StyledSlot>
         )
       }
     })
+    // END OF DAY SLOTS // DAY SLOTS // DAY SLOTS >>> //
 
-    const dayLines = (
+    const dayArray = (
       <div
         key={date}
       >
-        {lines}
+        {daySlots}
       </div>
     )
 
-    grid.push(dayLines)
+    grid.push(dayArray)
+
     return grid
   }
 };

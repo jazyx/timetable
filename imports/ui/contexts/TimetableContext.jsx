@@ -83,19 +83,28 @@ export const TimetableProvider = ({children}) => {
   // SUBSCRIBE / SUBSCRIBE / SUBSCRIBE / SUBSCRIBE >>> //
 
   // <<< DRAG // DRAG // DRAG // DRAG // DRAG // DRAG //
-  const dragItem = useRef()
-  const dragGhost = useRef()
-  const dragItemHeight = useRef()
+  const dragData = useRef()
+  // { session, ghost, height, lockCount, locked }
 
   const dragStart = (event) => {
-    const target = event.target
-    target.classList.add("dragged")
+    const session = event.target
+    const ghost = session.cloneNode(true)
+    const height = getComputedStyle(session)
+                  .getPropertyValue("height")
+    // HACK: height is provided as a prop to the Session component
+    // so a "height" attribute is added to the Session element.
+    // This allows us to retrieve it here.
+    const lockCount = session.getAttribute("height") * 1
 
-    dragItem.current = target
-    const ghost = dragGhost.current = target.cloneNode(true)
-    dragItemHeight.current = getComputedStyle(target)
-                            .getPropertyValue("height")
+    dragData.current = {
+      session,
+      ghost,
+      height,
+      lockCount
+    }
 
+    session.classList.add("dragged")
+    ghost.classList.remove("session")
     document.body.append(ghost)
 
     // Allow empty cells to react to drag events
@@ -103,44 +112,92 @@ export const TimetableProvider = ({children}) => {
 
     // Hide the default drag image
     event.dataTransfer.setDragImage(new Image(),0,0)
+    showDragGhost(event, true)
   }
 
 
-  const showDragImage = (event) => {
-    const {
-      left,
-      top,
-      width,
-    } = event.target.getBoundingClientRect()
-    dragGhost.current.style = `
-      position: fixed;
-      left: ${left}px;
-      top: ${top}px;
-      width: ${width}px;
-      height: ${dragItemHeight.current};
-      opacity: 0.75;
-      pointer-events: none;
-    `
+  const dragEnter = (event) => {
+    showDragGhost(event)
   }
+
 
   const dragOver = (event) => {
-    showDragImage(event)
-    event.preventDefault() // enables `drop` event
-    // event.target.classList.add("over")
+    if (!dragData.current.locked) {
+      event.preventDefault() // enables `drop` event
+    }
   }
 
-  const dragLeave = (event) => {
-    // event.target.classList.remove("over")
+
+  const dragEnd = (event) => {
+    const { session, ghost } = dragData.current
+
+    ghost.remove()
+    session.classList.remove("dragged")
+    dragData.current = {}
+
+    document.getElementById("grid").classList.remove("dragging")
   }
+
 
   const drop = (event) => {
-    event.target.classList.remove("over")
-    document.getElementById("grid").classList.remove("dragging")
+    console.log("Can drop")
+  }
 
-    dragGhost.current.remove()
-    dragGhost.current = undefined
-    dragItem.current.classList.remove("dragged")
-    dragItem.current = undefined
+
+  function showDragGhost(event, ignoreLock) {
+    if (!ignoreLock) {
+      event.preventDefault() // enables `drop` event
+    }
+
+    let { session, ghost, height, lockCount } = dragData.current
+
+    const target = event.target
+    let locked = target.classList.contains("locked")
+
+    if (!locked && !ignoreLock) {
+      // Check if the target is too close above a session, or to
+      // the end of the day, to be dropped there
+      let nextCell = target.nextSibling
+      while (--lockCount)
+      {
+        if (!nextCell || nextCell.querySelector(".session")) {
+          locked = true
+          break
+        }
+
+        nextCell = nextCell.nextSibling // undefined if last in day
+      }
+    }
+
+    let style = `display:none;`
+    if (locked) {
+      session.classList.remove("dragged")
+
+    } else {
+      const {
+        left,
+        top,
+        width,
+      } = target.getBoundingClientRect()
+
+      style += `
+        display: flex;
+        position: fixed;
+        left: ${left}px;
+        top: ${top}px;
+        width: ${width}px;
+        height: ${height};
+        opacity: 0.75;
+        pointer-events: none;
+        border: 1px solid white;
+        box-sizing: border-box;
+      `
+      session.classList.add("dragged")
+    }
+
+    ghost.style = style
+
+    dragData.current.locked = locked
   }
   // DRAG // DRAG // DRAG // DRAG // DRAG // DRAG >>>//
 
@@ -159,8 +216,9 @@ export const TimetableProvider = ({children}) => {
         timeZone,
         setTimeZone,
         dragStart,
+        dragEnter,
         dragOver,
-        dragLeave,
+        dragEnd,
         drop
       }}
     >

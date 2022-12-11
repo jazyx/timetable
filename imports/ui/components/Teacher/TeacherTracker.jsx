@@ -219,6 +219,12 @@ export const TeacherTracker = (teacher_name) => {
           index,
         } = session
 
+        // HACK
+        // height will be passed as a prop to the Session
+        // component, and will thus be added as an attribute to
+        // the Session div element. Its value can therefore be
+        // retrieved and used to calculate the number of slots
+        // required before the next session while dragging.
         const height = duration / 5
 
         // Place this dated session

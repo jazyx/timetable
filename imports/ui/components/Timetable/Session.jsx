@@ -16,8 +16,11 @@ const StyledSession = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  z-index: 1;
+
   height: ${props => (props.height * 100 + "%")};
-  border: none;
+
+  // Colours depend on whether session is scheduled
   background-color: ${props => (
     props.unscheduled
     ? translucify(props.bg_colour, 0.33)
@@ -28,12 +31,13 @@ const StyledSession = styled.div`
     ? translucify(props.bg_colour, 0.5)
     : "inherit"
   )};
+
   ${props => props.dated
            ? `border: inset 2px #999};`
-           : ""
+           : "border: none;"
   }
   pointer-events: all;
-  cursor: pointer;
+  cursor: grab;
 
   &.dragged {
     opacity: 0.3333;
@@ -56,6 +60,7 @@ export const Session = (props) => {
       { ...props }
       draggable
       onDragStart={dragStart}
+      className="session"
     >
       {props.name}
     </StyledSession>
