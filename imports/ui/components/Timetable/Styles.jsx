@@ -31,7 +31,7 @@ export const StyledGrid = styled.div`
     }
   }
 
-  & > div:not(:first-child) {
+  & > div {
       border-left: 1px solid var(--line-color);
 
     /* height and width */
@@ -63,6 +63,10 @@ export const StyledGrid = styled.div`
     & > div:nth-child(12n+${props => props.hourLine + 1}) {
       border-bottom: 1px solid var(--line-color);
     }
+  }
+
+  & > div:first-child {
+    border-left: none;
   }
 `
 

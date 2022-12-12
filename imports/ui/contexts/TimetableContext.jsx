@@ -32,6 +32,8 @@ export const TimetableProvider = ({children}) => {
   const [ midnight, setMidnight ] = useState(new Date())
   const [ monday, setMonday ] = useState(new Date())
   const [ day, setDay ] = useState(0)
+  const [ weekStart, setWeekStart ] = useState(new Date())
+
 
   const [ endTime, setEndTime ] = useState(new Date())
 
@@ -140,7 +142,20 @@ export const TimetableProvider = ({children}) => {
 
 
   const drop = (event) => {
-    console.log("Can drop")
+    const target = event.target
+    const parent = target.parentNode
+    let siblings = Array.from(parent.childNodes)
+    const row = siblings.indexOf(target) - 1 // 5-minute slots
+    siblings = Array.from(parent.parentNode.childNodes)
+    const column = siblings.indexOf(parent) // days
+
+    const dayOffset = column * 24 * 60 * 60 * 1000
+    const timeOffset = (row * 5) * 60 * 1000
+    const newSlot = new Date(
+      weekStart.getTime() + dayOffset + timeOffset
+    )
+
+    console.log("newSlot:", newSlot);
   }
 
 
@@ -215,6 +230,9 @@ export const TimetableProvider = ({children}) => {
         setDaysToDisplay,
         timeZone,
         setTimeZone,
+        setWeekStart,
+
+        // Drag event listeners
         dragStart,
         dragEnter,
         dragOver,

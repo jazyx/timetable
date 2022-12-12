@@ -2,7 +2,7 @@
  *
  */
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { TimetableContext } from '../../contexts/TimetableContext';
 
 import collections from '/imports/api/collections/'
@@ -28,7 +28,8 @@ export const TeacherTracker = (teacher_name) => {
   const {
     monday,
     endTime,
-    timeZone
+    timeZone,
+    setWeekStart
   } = useContext(TimetableContext)
   let daysToDisplay
 
@@ -120,6 +121,7 @@ export const TeacherTracker = (teacher_name) => {
     const sessions = []
 
     const { days } = getTimeBetween(monday, endTime)
+
     daysToDisplay = days
     const weeks = Math.ceil(days / 7)
 
@@ -274,18 +276,19 @@ export const TeacherTracker = (teacher_name) => {
           const datedSessionIndices = week[class_id] || []
           if (datedSessionIndices.indexOf(index) < 0) {
             const column  = weekIndex * 7 + offset
-            // <<< WET // WET // WET // WET // WET // WET //
-            const daySlot = sessionMap[column]
-                        || (sessionMap[column] = {})
-            const row = getTimeSlot(day_begin,repeat_from_date)+1
-            daySlot[row] = {
-              ...session,
-              ...classDoc,
-              column,
-              row,
-              height,
+
+            const daySlot = sessionMap[column] // may not exist
+
+            if (daySlot) {
+              const row = getTimeSlot(day_begin,repeat_from_date)+1
+              daySlot[row] = {
+                ...session,
+                ...classDoc,
+                column,
+                row,
+                height,
+              }
             }
-            // WET // WET // WET // WET // WET // WET >>>//
           }
          })
       }
@@ -299,7 +302,14 @@ export const TeacherTracker = (teacher_name) => {
 
   const rows = getTimeSlot(day_begin, day_end)
   const sessions = getSessions() || []
-  // console.log("sessions:", sessions);
+
+  // Tell the TimetableContext when this teacher's week started
+  useEffect(() => {
+    const weekStart = new Date(monday)
+    weekStart.setHours(day_begin.getHours())
+    weekStart.setMinutes(day_begin.getMinutes())
+    setWeekStart(weekStart)
+  }, []) // Dependency array required to prevent circular calls
 
 
   return {
