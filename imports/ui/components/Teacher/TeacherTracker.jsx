@@ -1,9 +1,7 @@
 /**
- *
+ * TeacherTracker.js
  */
 
-import { useContext, useEffect } from 'react';
-import { TimetableContext } from '../../contexts/TimetableContext';
 
 import collections from '/imports/api/collections/'
 const {
@@ -11,7 +9,6 @@ const {
   Contract,
   Class,
   Session,
-  L10n
 } = collections
 
 import {
@@ -23,15 +20,21 @@ import {
 } from '/imports/tools/utilities'
 
 
+  //   monday,
+  //   endTime,
+  //   timeZone,
+  //   setWeekStart,
+  //   teacher_name
 
-export const TeacherTracker = (teacher_name) => {
+export const TeacherTracker = (props) => {
   const {
+    teacher_name,
     monday,
     endTime,
     timeZone,
-    setWeekStart
-  } = useContext(TimetableContext)
+  } = props
   let daysToDisplay
+
 
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
@@ -86,8 +89,6 @@ export const TeacherTracker = (teacher_name) => {
 
   const getClasses = () => {
     const contracts = getContracts() // for current teacher
-    // console.log("contracts:", contracts);
-    // [ <contract_id>, ... ]
 
     // Find all classes associated with active contracts,
     // starting any time before the end of the period to
@@ -237,8 +238,8 @@ export const TeacherTracker = (teacher_name) => {
         // + 1 allows for a header cell
         const row = getTimeSlot(day_begin, date) + 1
         daySlot[row] = {
-          ...session,
           ...classDoc,
+          ...session,
           column,
           row,
           height,
@@ -282,8 +283,8 @@ export const TeacherTracker = (teacher_name) => {
             if (daySlot) {
               const row = getTimeSlot(day_begin,repeat_from_date)+1
               daySlot[row] = {
-                ...session,
                 ...classDoc,
+                ...session,
                 column,
                 row,
                 height,
@@ -303,16 +304,8 @@ export const TeacherTracker = (teacher_name) => {
   const rows = getTimeSlot(day_begin, day_end)
   const sessions = getSessions() || []
 
-  // Tell the TimetableContext when this teacher's week started
-  useEffect(() => {
-    const weekStart = new Date(monday)
-    weekStart.setHours(day_begin.getHours())
-    weekStart.setMinutes(day_begin.getMinutes())
-    setWeekStart(weekStart)
-  }, []) // Dependency array required to prevent circular calls
-
-
   return {
+    day_begin,
     firstHour,
     hourLine,
     rows,

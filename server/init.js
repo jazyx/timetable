@@ -59,8 +59,6 @@ function populateFromJSON(name) {
               .finally(insertRecords)
 
       function insertRecords() {
-        // console.log(`Inserting records into ${name} collection from ${fileName}`);
-
         docs.forEach( doc => {
           if (isDevelopment) {
             insertProper_ids(doc)

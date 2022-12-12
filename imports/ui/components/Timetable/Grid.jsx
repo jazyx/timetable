@@ -75,8 +75,6 @@ export const Grid = (props) => {
     //     link:          <url for meeting>
     //     name:          <string Class.name>
     //     row:           <number>
-    //     session_begin: <decimal number 0.0 - 24.0>
-    //     session_end:   <decimal number 0.0 - 24.0>
     //     supplement:    <boolean
     //     tentative:     <boolean
     //     unscheduled:   <boolean
@@ -106,6 +104,8 @@ export const Grid = (props) => {
       if (sessionData) {
         sessionChild = <Session {...sessionData} />
         lockedSlots = sessionData.height
+
+        
       }
 
       let className
@@ -128,7 +128,6 @@ export const Grid = (props) => {
             before={time}
             onDragOver={dragOver}
             onDragEnter={dragEnter}
-            onDragEnd={dragEnd}
             onDrop={drop}
             className={className}
           >

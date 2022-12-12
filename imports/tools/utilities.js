@@ -656,8 +656,6 @@ export const trimImage = (image) => {
   , trimHeight
   )
 
-  // console.log(bound)
-
   copy.canvas.width = trimWidth
   copy.canvas.height = trimHeight
   copy.putImageData(trimmed, 0, 0)

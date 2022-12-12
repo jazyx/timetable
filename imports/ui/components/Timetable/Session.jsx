@@ -45,14 +45,21 @@ const StyledSession = styled.div`
 `
 
 export const Session = (props) => {
-  if (!props.height) {
+  const { height, _id, date } = props  
+  if (!height) {
     return ""
   }
 
 
   const {
     dragStart,
+    dragEnd
   } = useContext(TimetableContext)
+
+
+  const updateTimetable = () => {    
+    dragEnd(_id, !!date) // false if repeat_from_date but no date
+  }
 
 
   return (
@@ -60,6 +67,7 @@ export const Session = (props) => {
       { ...props }
       draggable
       onDragStart={dragStart}
+      onDragEnd={updateTimetable}
       className="session"
     >
       {props.name}

@@ -12,7 +12,10 @@ import {
 } from '/imports/tools/utilities'
 
 import methods from '/imports/api/methods/'
-const { addTimeZone } = methods
+const {
+  addTimeZone,
+  rescheduleSession
+} = methods
 
 
 
@@ -33,11 +36,14 @@ export const TimetableProvider = ({children}) => {
   const [ monday, setMonday ] = useState(new Date())
   const [ day, setDay ] = useState(0)
   const [ weekStart, setWeekStart ] = useState(new Date())
-
-
+  const [ schedule, setSchedule ] = useState({})
   const [ endTime, setEndTime ] = useState(new Date())
-
   const [ daysToDisplay, setDaysToDisplay ] = useState(8)
+
+
+  const setStartOfWeek = (startOfWeek) => {
+    setWeekStart(startOfWeek)
+  }
 
   // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
   const setDateValues = () => {
@@ -129,18 +135,14 @@ export const TimetableProvider = ({children}) => {
     }
   }
 
-
-  const dragEnd = (event) => {
-    const { session, ghost } = dragData.current
-
-    ghost.remove()
-    session.classList.remove("dragged")
-    dragData.current = {}
-
-    document.getElementById("grid").classList.remove("dragging")
-  }
-
-
+  /**
+   * drop is received by the drop target _before_ the dragged
+   * element receives dragEnd but only if dragData.current.locked
+   * is falsy.
+   *
+   * Determine the day and time associated with the slot that
+   * the session was dropped on
+   */
   const drop = (event) => {
     const target = event.target
     const parent = target.parentNode
@@ -149,17 +151,37 @@ export const TimetableProvider = ({children}) => {
     siblings = Array.from(parent.parentNode.childNodes)
     const column = siblings.indexOf(parent) // days
 
+    // Convert row and column to an actual date and time...
     const dayOffset = column * 24 * 60 * 60 * 1000
     const timeOffset = (row * 5) * 60 * 1000
-    const newSlot = new Date(
+    // ... and save it in dragData so that it will be available
+    // in the dragEnd listener
+    dragData.current.date = new Date(
       weekStart.getTime() + dayOffset + timeOffset
     )
-
-    console.log("newSlot:", newSlot);
   }
 
 
-  function showDragGhost(event, ignoreLock) {
+  const dragEnd = (_id, dated) => {
+    const { session, ghost, date } = dragData.current
+
+    // Clean up the timetable DOM
+    ghost.remove()
+    session.classList.remove("dragged")
+    document.getElementById("grid").classList.remove("dragging")
+    dragData.current = {}
+
+    if (date) {
+      rescheduleSession.call({
+        _id,
+        dated,
+        date,
+      })
+    }
+  }
+
+
+  const showDragGhost = (event, ignoreLock) => {
     if (!ignoreLock) {
       event.preventDefault() // enables `drop` event
     }

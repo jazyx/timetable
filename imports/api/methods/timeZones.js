@@ -2,7 +2,10 @@
 import SimpleSchema from 'simpl-schema'
 
 import collections from '../collections/'
-const { TimeZone } = collections
+const {
+  TimeZone,
+  Session
+ } = collections
 
 // Intl.supportedValuesOf('timeZone')
 // https://stackoverflow.com/a/54500197/1927589
@@ -169,7 +172,7 @@ const aryIannaTimeZones = [
   'Antarctica/Syowa',
   'Antarctica/Troll',
   'Antarctica/Vostok',
-  
+
   'Asia/Almaty',
   'Asia/Amman',
   'Asia/Anadyr',
@@ -391,9 +394,51 @@ export const addTimeZone = {
     }
 
     const existingZone = TimeZone.findOne({ timeZone })
-    
+
     if (!existingZone) {
       TimeZone.insert({ timeZone })
+    }
+  }
+}
+
+
+export const rescheduleSession = {
+  name: "timetable.rescheduleSession"
+
+, call(sessionData, callback) {
+    const options = {
+      returnStubValue: true
+    , throwStubExceptions: true
+    }
+
+    Meteor.apply(this.name, [sessionData], options, callback)
+  }
+
+, validate(sessionData) {
+    new SimpleSchema({
+      _id:   { type: String },
+      dated: { type: Boolean},
+      date:  { type: Date}
+    }).validate(sessionData)
+  }
+
+, run(sessionData) {
+    let { _id, dated, date } = sessionData;
+
+    if (dated) {
+      // Simply change the date of the session
+      const $set = { date }
+      Session.update({ _id }, { $set })
+
+    } else {
+      // Create a new dated record with the data from the
+      // Session document with the given _id
+      const session = Session.findOne({ _id })
+      delete session._id
+      delete session.repeat_from_date
+      session.date = date
+      session.name_remove_later = "****CHANGED****"
+      Session.insert(session)
     }
   }
 }
