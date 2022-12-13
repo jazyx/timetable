@@ -1,5 +1,5 @@
 /**
- * TeacherTracker.js
+ * SessionTracker.js
  */
 
 
@@ -16,17 +16,12 @@ import {
   getTimeSlot,
   getMinuteSlot,
   getZoneTime,
-  getLocalDate
+  getLocalDate,
+  reschedule
 } from '/imports/tools/utilities'
 
 
-  //   monday,
-  //   endTime,
-  //   timeZone,
-  //   setWeekStart,
-  //   teacher_name
-
-export const TeacherTracker = (props) => {
+export const SessionTracker = (props) => {
   const {
     teacher_name,
     monday,
@@ -131,8 +126,8 @@ export const TeacherTracker = (props) => {
     }
 
     for(let ii = 0; ii < days; ii += 1) {
-      const localDate = getLocalDate(monday, ii, timeZone)
-      sessions[ii] = [localDate]
+      const date = getLocalDate(monday, ii, timeZone, language)
+      sessions[ii] = [date]
     }
 
     return {
@@ -182,7 +177,6 @@ export const TeacherTracker = (props) => {
       // Order chronologically, with precisely dated sessions first
              .sort(byDateBeginDay)
              .forEach(placeSession) // updates sessionMap
-
       return sessionMap
 
 
@@ -278,16 +272,20 @@ export const TeacherTracker = (props) => {
           if (datedSessionIndices.indexOf(index) < 0) {
             const column  = weekIndex * 7 + offset
 
+            const scheduled = reschedule(monday, column, repeat_from_date)
+
             const daySlot = sessionMap[column] // may not exist
 
             if (daySlot) {
               const row = getTimeSlot(day_begin,repeat_from_date)+1
+
               daySlot[row] = {
                 ...classDoc,
                 ...session,
                 column,
                 row,
                 height,
+                scheduled
               }
             }
           }

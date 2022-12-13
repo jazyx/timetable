@@ -45,7 +45,34 @@ const StyledSession = styled.div`
 `
 
 export const Session = (props) => {
-  const { height, _id, date } = props  
+  // console.log("Session props:", props);
+  // _id:               <string session id>
+  // class_id:          <string id>
+  // contract_id:       <string id>
+  // name:              <class name>
+  // students:          [<student name>, ...]
+  //
+  // bg_colour:         <hex string>
+  // index:             <integer session in week>
+  // column:            <integer days since monday>
+  // row:               <integer 5-minute slots since day_begin>
+  // duration:          <integer minutes>
+  // height:            <duration / 5>
+  //
+  // proposal:          <true if set by School>
+  //
+  // repeat_from_date:  <Date>
+  // scheduled:         <Date>
+  // OR
+  // date:              <Date>
+  // start_date:        <Date>
+  // end_date:          <"" | Date>
+
+  // link:              <url for online meeting>
+  // location:          <url for meeting address>
+  // travelling_time:   <minutes from previous location></minutes>
+
+  const { height, _id, scheduled } = props
   if (!height) {
     return ""
   }
@@ -57,8 +84,8 @@ export const Session = (props) => {
   } = useContext(TimetableContext)
 
 
-  const updateTimetable = () => {    
-    dragEnd(_id, !!date) // false if repeat_from_date but no date
+  const updateTimetable = () => {
+    dragEnd(_id, scheduled)
   }
 
 

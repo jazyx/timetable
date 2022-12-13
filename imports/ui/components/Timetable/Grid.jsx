@@ -36,7 +36,7 @@ export const Grid = (props) => {
     daysToDisplay,
 
     blocked={}
-  } = props // from TeacherTracker.jsx
+  } = props // from SessionTracker.jsx
 
 
   const grid = sessions.reduce(buildGrid, [])
@@ -104,8 +104,6 @@ export const Grid = (props) => {
       if (sessionData) {
         sessionChild = <Session {...sessionData} />
         lockedSlots = sessionData.height
-
-        
       }
 
       let className

@@ -19,7 +19,7 @@ import { useTracker } from 'meteor/react-meteor-data'
 
 import { TimetableContext } from '../../contexts/TimetableContext';
 
-import { TeacherTracker } from './TeacherTracker'
+import { SessionTracker } from './SessionTracker'
 import { TeacherToolbar } from './TeacherToolbar'
 import { Grid } from '../Timetable/Grid'
 
@@ -38,7 +38,7 @@ export const Teacher = () => {
   const { monday, setWeekStart } = context
 
 
-  const props = useTracker(() => TeacherTracker(context))
+  const props = useTracker(() => SessionTracker(context))
   // {
   //   blocked, <<<<
   //   firstHour,

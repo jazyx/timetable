@@ -1012,27 +1012,46 @@ export const getZoneTime = (dateTime, timeZone) => {
 
 
 /**
- * Returns a date like Mon 5 Dec
+ * Returns a date like "Mon 5 Dec" or "пн 5 дек." in the
+ * format defined by isoCode.
+ * 
+ * If isoCode is invalid, the browser interface language will
+ * automatically be used by default.
  */
-export const getLocalDate = (date, daysLater, timeZone) => {
+export const getLocalDate = (date, daysLater, timeZone, isoCode) => {
   const msLater = daysLater * 24 * 60 * 60 * 1000
   const newDate = new Date(date.getTime() + msLater)
   const options = {
     weekday: 'short',
-    month: 'short',
     day: 'numeric',
+    month: 'short',
     timeZone
   }
   let isoString
   try {
-    isoString = newDate.toLocaleString( "en-GB", options )
+    isoString = newDate.toLocaleString( isoCode, options )
   } catch(error) {
     delete options.timeZone
     // Use locale timeZone by default if timeZone is invalid
-    isoString = newDate.toLocaleString("en-GB", options)
+    isoString = newDate.toLocaleString( isoCode, options )
   }
 
   isoString = isoString.replace(",", "")
 
   return isoString
+}
+
+
+export const reschedule = (date, daysLater, timeSource) => {
+  const msLater = daysLater * 24 * 60 * 60 * 1000
+  const rescheduled = new Date(date.getTime() + msLater)
+
+  if (timeSource && timeSource.getHours) {
+    rescheduled.setHours(timeSource.getHours())
+    rescheduled.setMinutes(timeSource.getMinutes())
+    rescheduled.setSeconds(timeSource.getSeconds())
+    rescheduled.setMilliseconds(timeSource.getMilliseconds())
+  }
+
+  return rescheduled
 }

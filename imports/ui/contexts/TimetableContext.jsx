@@ -162,7 +162,7 @@ export const TimetableProvider = ({children}) => {
   }
 
 
-  const dragEnd = (_id, dated) => {
+  const dragEnd = (_id, scheduled) => {
     const { session, ghost, date } = dragData.current
 
     // Clean up the timetable DOM
@@ -174,7 +174,7 @@ export const TimetableProvider = ({children}) => {
     if (date) {
       rescheduleSession.call({
         _id,
-        dated,
+        scheduled,
         date,
       })
     }

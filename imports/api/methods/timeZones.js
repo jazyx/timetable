@@ -416,29 +416,48 @@ export const rescheduleSession = {
 
 , validate(sessionData) {
     new SimpleSchema({
-      _id:   { type: String },
-      dated: { type: Boolean},
-      date:  { type: Date}
+      _id:       { type: String },
+      scheduled: { type: Date, optional: true },
+      date:      { type: Date}
     }).validate(sessionData)
   }
 
 , run(sessionData) {
-    let { _id, dated, date } = sessionData;
+    let { _id, scheduled, date } = sessionData;
+    console.log("scheduled:", scheduled);
 
-    if (dated) {
-      // Simply change the date of the session
-      const $set = { date }
-      Session.update({ _id }, { $set })
 
-    } else {
+    if (scheduled) {
       // Create a new dated record with the data from the
       // Session document with the given _id
       const session = Session.findOne({ _id })
+
+      console.log("Reschedule session:", {...session});
+      // _id:              <string id>
+      // class_id:         <string id>
+      // repeat_from_date: <Date>
+      // duration:         <minutes>
+      // index:            <integer session in week>
+
       delete session._id
       delete session.repeat_from_date
+      delete session.name_remove_later // REMOVE LATER
+
+      // Replace the scheduled repeating session with an
+      // unscheduled dated session
+      const unscheduled = { ...session }
+      unscheduled.date = scheduled
+      unscheduled.unscheduled = true
+      Session.insert(unscheduled)
+
+      // Create a new dated session
       session.date = date
-      session.name_remove_later = "****CHANGED****"
       Session.insert(session)
+
+    } else {
+      // Simply change the date of the session
+      const $set = { date }
+      Session.update({ _id }, { $set })
     }
   }
 }
