@@ -1,3 +1,11 @@
+/**
+ * Styles.jsx
+ *
+ * Provides StyledGrid and StyledSlot, which are used by the Grid
+ * component.
+ */
+
+
 import styled from "styled-components"
 
 
@@ -31,6 +39,7 @@ export const StyledGrid = styled.div`
     }
   }
 
+  /* Styling of day columns */
   & > div {
       border-left: 1px solid var(--line-color);
 
@@ -42,6 +51,7 @@ export const StyledGrid = styled.div`
       width: calc((100vw - 10px) / 8);
     }
 
+    /* Styling of 5-minute slots */
     & > div {
       height: calc(var(--full-height) / ${props => props.rows});
     }
@@ -55,6 +65,7 @@ export const StyledGrid = styled.div`
       overflow: hidden;
     }
 
+    /* Alternate row colours */
     & > div:nth-child(even) {
       background-color: var(--even-color);
     }
@@ -65,12 +76,18 @@ export const StyledGrid = styled.div`
     }
   }
 
+  /* No day border to duplicate week border */
   & > div:first-child {
     border-left: none;
   }
 `
 
 
+/**
+ * props = {
+ *    before: integer hour to show
+ *  }
+ */
 export const StyledSlot = styled.div`
   position: relative; /* because ::before is absolute */
 

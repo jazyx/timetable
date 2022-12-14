@@ -1,12 +1,11 @@
 /**
  * TimeZones.jsx
- * 
- * Creates a selector for choosing a timeZone
+ *
+ * Creates a selector for choosing a timeZone.
  */
 
 
 import React, { useContext } from 'react';
-import styled from "styled-components"
 import { useTracker } from 'meteor/react-meteor-data'
 
 import { TimetableContext } from '/imports/ui/contexts/TimetableContext'
@@ -48,6 +47,7 @@ export const TimeZones = () => {
     const zoneString = now.toLocaleString(
       'en-GB', { timeZone }
     );
+
     return { zoneString, timeZone}
   }).sort(byTimeAndZoneName)
 
@@ -99,13 +99,13 @@ export const TimeZones = () => {
 }
 
 
-
+// Sorting time zones
 function byTimeAndZoneName(a, b) {
   const aString = a.zoneString
   const bString = b.zoneString
 
   if (aString === bString) {
-    // Time zones are identical; sort by zone name
+    // Time zones are identical; sort alphabetically by zone name
     if (a.timeZone < b.timeZone) {
       return -1
     } else {

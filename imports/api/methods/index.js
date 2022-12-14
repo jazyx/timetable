@@ -3,11 +3,13 @@ import { Meteor } from 'meteor/meteor'
 
 
 import * as timeZones from './timeZones'
+import * as timeTable from './timeTable'
 
 
 
 const methodObjects = {
-  ...timeZones
+  ...timeZones,
+  ...timeTable
 }
 
 

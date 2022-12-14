@@ -2,13 +2,34 @@
  * Grid.jsx
  *
  * Displays a calendar
- * - Can scroll to show future weeks
- * - Times shown every 2/3 columns
- * - Earliest and latest times depend on expected session times
+ * - Times shown every 2 columns
+ * - Can scroll to show coming week
+ * - Earliest and latest times depend on teacher availability
+ * - Allows any user to reschedule sessions
+ *
+ * The grid is a series of day/column divs each containing the
+ * same number of 5-minute time-slot divs.
+ *
+ * Certain time-slot divs will contain a child div whose height
+ * will cover the following time-slot divs, because it has a
+ * greater z-index. Such "session" child divs will:
+ * - Display details of a session
+ * - Contain dragStart and dragEnd event listeners
+ * - Add a `locked` class to each of the time-slot divs that are
+ *   covered by the "session" div.
+ *
+ * + Session objects are created (and styled) in Session.jsx
+ * + Styles for Grid and Slot are imported from a separate
+ *   Styles.jsx file in the same directory
+ * + Every 12th time-slot div will display an hour time via a
+ *   ::before pseudo element
+ * + Alternating rows have slightly different background colours
+ * + All time-slot divs contain dragEnter, dragOver and drop
+ *   listeners
  */
 
 import React, { useContext } from 'react';
-import { TimetableContext } from '../../contexts/TimetableContext';
+import { TimetableContext } from '/imports/ui/contexts/TimetableContext.jsx';
 
 
 // Styled Components
@@ -21,11 +42,13 @@ import { Session } from '../Timetable/Session'
 
 
 export const Grid = (props) => {
+  console.log("Grid component called:", props)
   const {
     dragEnter,
     dragOver,
-    dragEnd,
-    drop
+    drop,
+    dragStart,
+    dragEnd
   } = useContext(TimetableContext)
 
   const {
@@ -56,28 +79,43 @@ export const Grid = (props) => {
 
   // BUILD GRID // BUILD GRID // BUILD GRID // BUILD GRID //
 
-
   function buildGrid(grid, daySessions, dayIndex) {
     // console.log("daySessions:", daySessions);
     // daySessions: [
     //   "Mon 5 Dec",
     //   ...,
     //   {
-    //     _id:           <id string>
-    //     bg_colour:     <string Class hex colour>
-    //     billed:        <boolean>
-    //     column:        <number>
-    //     date:          <string date-time or empty string.
-    //     day:           <integer 0 - 6 or undefined>
-    //     forfeited:     <boolean>
-    //     height:        <integer>
-    //     index:         <integer>
-    //     link:          <url for meeting>
-    //     name:          <string Class.name>
-    //     row:           <number>
-    //     supplement:    <boolean
-    //     tentative:     <boolean
-    //     unscheduled:   <boolean
+    //     _id:              <id string>
+    //     class_id:         <id string>
+    //     contract_id:      <id string>
+    //     name:             <string Class.name>
+    //     students:         [<string student name>, ...]
+    //     index:            <integer class number in week>
+    //
+    //     bg_colour:        <string Class hex colour>
+    //     billed:           <boolean>
+    //     column:           <number>
+    //     row:              <number>
+    //
+    //     date:             <date>
+    //     OR
+    //     repeat-from_date: <date used just for day and time>
+    //     scheduled:        <precise date of repeating session>
+    //     day:              <integer 0 - 6 or undefined>
+    //     weekIndex:        <integer of weeks since monday>
+    //
+    //     duration:         <integer number of minutes>
+    //     height:           <integer: duration / 5>
+    //     link:             <url for online meeting>
+    //     location:         <url for meeting location>
+    //     travelling_time:  <minutes to get from last location>
+    //     start_date:       <date>
+    //     end_date:         <date or empty string>
+    //     proposal:         <true if set by School>
+    //     unscheduled:      <true if cancelled well in advance>
+    //     forfeited:        <true if cancelled after limit>
+    //     supplement:       <true if additional session in week>
+    //     tentative:        <true if rescheduled by student>
     // }, ...]
 
     // const blockedCells = blocked[weekDay] || {}
@@ -102,10 +140,15 @@ export const Grid = (props) => {
       const sessionData = daySessions[index] || 0
       let sessionChild
       if (sessionData) {
-        sessionChild = <Session {...sessionData} />
+        sessionChild = <Session
+                         {...sessionData}
+                         dragStart={dragStart}
+                         dragEnd={dragEnd}
+                       />
         lockedSlots = sessionData.height
       }
 
+      // Set class to "locked", if covered by a Session element
       let className
       if (lockedSlots) {
         lockedSlots--
@@ -119,7 +162,7 @@ export const Grid = (props) => {
           >{date}</div>
         )
 
-      } else { // time slots
+      } else {
         return (
           <StyledSlot
             key={key}

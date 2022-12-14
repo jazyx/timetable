@@ -1,9 +1,76 @@
-/**
+ /**
  * SessionTracker.js
+ *
+ * SessionTracker is called each time a component that uses it is
+ * (re-)rendered.
+ *
+ * For now, this is just Teacher.jsx.
+ *
+ * It generates an object containing data that is used by Grid to
+ * display a calendar
+ *
+ * return {
+ *   day_begin:     used by the calling component to calculate
+ *                  weekStart, which will be set in
+ *                  TimetableContext
+ *   firstHour:     integer hour in which day_begin occurs.
+ *                  Used by Grid as the starting point for the
+ *                  ::before entries for the timed cells
+ *   hourLine:      integer number of slots before the first
+ *                  complete hour in the teacher's day. Used by
+ *                  Grid to calculate where to draw hour cells
+ *   rows:          integer total number of 5-minutes time slots.
+ *                  Used by StyledGrid to calculate the height of
+ *                  each slot div, in order to fill the page
+ *                  height
+ *   sessions:      array of day/column arrays. Each day/column
+ *                  array will start with a date string. There
+ *                  may be session objects later in the array.
+ *   daysToDisplay: integer total number of days between the
+ *                  `monday` of the current week and the last day
+ *                  to show in the calendar
+ *   createDated:   array. May contain session objects which will
+ *                  be used to generate dated session records for
+ *                  scheduled repeating sessions which are now in
+ *                  the past.
+ * }
+ *
+ * The SessionTracker requires the following input from the
+ * component that calls it:
+ *
+ * - teacher_name: from URL params
+ * - monday:    \
+ * - endTime:    > imported from TimetableContext
+ * - timeZone   /
+ *
+ * 1. Finds the appropriate Teacher document, to use:
+ *    - teacher_id: to obtain contract records for the teacher
+ *    - day_begin and _end: to calculate rows needed for grid
+ *    - language: to determine what language to display the date
+ *      headers in the calendar
+ * 2. Uses teacher_id to find all the current Contracts for this
+ *    teacher
+ * 3. Uses the array of contract_ids to find all the currently
+ *    active Classes for each Contract
+ * 4. Uses the class_ids to find all the Sessions that:
+ *    - Are dated within the period between monday and endTime
+ *    - Repeat every week at a specific time
+ * 5. Orders sessions:
+ *    - Dated sessions
+ *    - Unschedule sessions (with a specific date)
+ *    - Repeating sessions
+ * 6. Places each session in the appropriate place in the sessions
+ *    array
+ * 7. If any repeating sessions are scheduled for some time in the
+ *    past, these are added to the createDated, so that the
+ *    calling component can call the createDatedSession() Meteor
+ *    method on useEffect. This will cause a re-render which will
+ *    cause SessionTracker to be called again
  */
 
 
 import collections from '/imports/api/collections/'
+
 const {
   Teacher,
   Contract,
@@ -26,9 +93,11 @@ export const SessionTracker = (props) => {
     teacher_name,
     monday,
     endTime,
-    timeZone,
+    timeZone
   } = props
   let daysToDisplay
+  const now = new Date()
+  const createDated = []
 
 
   const teacherData = Teacher.findOne({ name: teacher_name })
@@ -62,7 +131,7 @@ export const SessionTracker = (props) => {
 
 
   let {
-    _id,
+    _id: teacher_id,
     day_begin,
     day_end,
     language,
@@ -73,7 +142,7 @@ export const SessionTracker = (props) => {
 
   // Get _ids of contracts signed with the current teacher
   const getContracts = () => {
-    const query = { teacher_id: _id }
+    const query = { teacher_id }
     const fields = { _id: 1 }
     const contracts = Contract.find(query, { fields })
                               .fetch()
@@ -110,22 +179,31 @@ export const SessionTracker = (props) => {
 
 
   const getTreatedSessionsMap = () => {
-    // [<week integer>: {
-    //   <class_id>: [<integer index>, ...]
-    // }, ...]
+    // OUTPUT:
+    // { treated: [
+    //     <week integer>: {
+    //       <class_id>: [<integer index>, ...]
+    //     },
+    //     ...
+    //   ],
+    //   sessions: [
+    //      [[<Date>]],
+    //      ...
+    //   ]
+    // }
+
     const treated = []
     const sessions = []
 
-    const { days } = getTimeBetween(monday, endTime)
+    ;({ days: daysToDisplay } = getTimeBetween(monday, endTime))
 
-    daysToDisplay = days
-    const weeks = Math.ceil(days / 7)
+    const weeks = Math.ceil(daysToDisplay / 7)
 
     for(let ii = 0; ii < weeks; ii += 1) {
       treated[ii] = {}
     }
 
-    for(let ii = 0; ii < days; ii += 1) {
+    for(let ii = 0; ii < daysToDisplay; ii += 1) {
       const date = getLocalDate(monday, ii, timeZone, language)
       sessions[ii] = [date]
     }
@@ -271,6 +349,10 @@ export const SessionTracker = (props) => {
 
             const scheduled = reschedule(monday, column, repeat_from_date)
 
+            if (scheduled < now) {
+              createDated.push({ ...session, scheduled })
+            }
+
             const daySlot = sessionMap[column] // may not exist
 
             if (daySlot) {
@@ -308,6 +390,7 @@ export const SessionTracker = (props) => {
     hourLine,
     rows,
     sessions,
-    daysToDisplay
+    daysToDisplay,
+    createDated
   }
 }

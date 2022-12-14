@@ -1042,7 +1042,16 @@ export const getLocalDate = (date, daysLater, timeZone, isoCode) => {
 }
 
 
-export const reschedule = (date, daysLater, timeSource) => {
+/**
+ * Returns a date daysLater than the input date, using the
+ * time given by the timeSource date object
+ *
+ * date:       Date object
+ * daysLater:  integer
+ * timeSource: (optional) date(time) object, whose date is
+ *             ignored
+ */
+export const reschedule = (date, daysLater = 0, timeSource) => {
   const msLater = daysLater * 24 * 60 * 60 * 1000
   const rescheduled = new Date(date.getTime() + msLater)
 

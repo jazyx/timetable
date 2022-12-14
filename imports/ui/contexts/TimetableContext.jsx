@@ -1,3 +1,66 @@
+/**
+ * TimetableContext.jsx
+ *
+ * This script handles:
+ * + Time Zone settings
+ * + Calculating when the current week begins
+ * + Defining when the current session period ends
+ * + Dragging a session from one time slot to another
+ *
+ * This script provides the following values to all components:
+ *
+ * // Flag set to true when core collections are online
+ * + ready
+ *
+ * // Specific times
+ * + midnight:      Date object set to 00:00 local time
+ *                  (used only in this script)
+ * + monday:        Date object set to 00:00 local time on the
+ *                  first Monday before today
+ *                  (accessed in Teacher.jsx, where it is used
+ *                  to calculated weekStart; passed to
+ *                  SessionTracker, where it is used to:
+ *                  - Calculate how many days to display in
+ *                    total
+ *                  - Provide start and end dates for the query
+ *                    for dated sessions
+ *                  - Place sessions in the right day columns
+ *                  - Set the header dates )
+ * + daysToShow:    number of days in future to display
+ *                  (default=8 to show the same day next week)
+ * + setDaysToShow: function to alter daysToShow
+ *                  (not yet implemented)
+ * + endTime:       Date object set to 00:00 on the day
+ *                  daysToShow after today
+ *                  (accessed in Teacher.jsx and forwarded to
+ *                  SessionTracker, where it is used to:
+ *                  - Find the right dated Session records)
+ * + timeZone:      string such as "Europe/Moscow"
+ *                  (valid: Intl.supportedValuesOf('timeZone')))
+ * + setTimeZone:   function to set timeZone (from a pop-up)
+ *                  (used/set in TimeZones.jsx
+ *                  accessed in Teacher.jsx and forwarded to
+ *                  SessionTracker, where it is used to:
+ *                  - Create the date headers for each day column
+ *                  - Get the `day` integer for repeating sessions
+ *                  - Get the hour and hourLine for the grid )
+ * + setWeekStart:  function to set the time when the current
+ *                  teacher starts working (on monday).
+ *                  (called as a useEffect from Teacher.jsx
+ *
+ * + // Drag event listeners
+ * + dragStart: called by the Session div that is dragged
+ * + dragEnter: called by slot divs as the Session div is dragged
+ * + dragOver:  called by slot divs as the Session div is dragged
+ * + drop:      called by slot divs as the Session div is dragged
+ * + dragEnd:   called by the Session div that is dragged.
+ *              dragEnd is where call to the rescheduleSession
+ *              Meteor method is made.
+ *              (in /imports/api/methods/timeTable.js)
+ */
+
+
+
 import React, {
   createContext,
   useState,
@@ -34,20 +97,18 @@ export const TimetableProvider = ({children}) => {
   ) // "Europe/Moscow"
   const [ midnight, setMidnight ] = useState(new Date())
   const [ monday, setMonday ] = useState(new Date())
-  const [ day, setDay ] = useState(0)
   const [ weekStart, setWeekStart ] = useState(new Date())
   const [ endTime, setEndTime ] = useState(new Date())
-  const [ daysToDisplay, setDaysToDisplay ] = useState(8)
+  const [ daysToShow, setDaysToShow ] = useState(8)
 
 
   // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
   const setDateValues = () => {
-    const { midnight, monday, day} = getTimeValues(timeZone)
+    const { midnight, monday } = getTimeValues(timeZone)
     setMidnight(midnight)
     setMonday(monday)
-    setDay(day)
 
-    const addMS = daysToDisplay * 24 * 60 * 60 * 1000
+    const addMS = daysToShow * 24 * 60 * 60 * 1000
     const endTime = new Date(midnight.getTime() + addMS)
     setEndTime(endTime)
   }
@@ -57,7 +118,6 @@ export const TimetableProvider = ({children}) => {
 
 
   // <<< SUBSCRIBE / SUBSCRIBE / SUBSCRIBE / SUBSCRIBE //
-
   const unReady = []
   const subscriptions = {}
 
@@ -82,12 +142,21 @@ export const TimetableProvider = ({children}) => {
   }
 
   useEffect(subscribeToCollections, [])
-
   // SUBSCRIBE / SUBSCRIBE / SUBSCRIBE / SUBSCRIBE >>> //
+
 
   // <<< DRAG // DRAG // DRAG // DRAG // DRAG // DRAG //
   const dragData = useRef()
-  // { session, ghost, height, lockCount, locked }
+  // Will be: {
+  //   session,
+  //   ghost,
+  //   height,
+  //   lockCount,
+  //   locked,
+  //   date,
+  //   dropWeek
+  // }
+
 
   const dragStart = (event) => {
     const session = event.target
@@ -164,10 +233,10 @@ export const TimetableProvider = ({children}) => {
    * _id:       id of session to reschedule
    * scheduled: currently scheduled Date of this session
    * weekIndex: integer week count since monday of this session
+   * day:       integer day number (0 = Sunday, 6 = Saturday)
+   *            when scheduled lesson will occur
    */
   const dragEnd = ( _id, scheduled, weekIndex, day ) => {
-    console.log("scheduled:", scheduled);
-
     const { session, ghost, date, dropWeek } = dragData.current
     let weekStart // undefined/falsy by default
     if (dropWeek !== weekIndex) {
@@ -258,10 +327,9 @@ export const TimetableProvider = ({children}) => {
         ready, // set to true when core collections are online
         midnight,
         monday,
-        day,
         endTime,
-        daysToDisplay,
-        setDaysToDisplay,
+        daysToShow,
+        setDaysToShow,
         timeZone,
         setTimeZone,
         setWeekStart,

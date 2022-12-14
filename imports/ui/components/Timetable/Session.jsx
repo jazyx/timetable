@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from "styled-components"
-import { TimetableContext } from '../../contexts/TimetableContext';
+
 import {
   translucify,
   toneColor
@@ -43,7 +43,7 @@ const StyledSession = styled.div`
 `
 
 export const Session = (props) => {
-  console.log("Session props:", props);
+  // console.log("Session props:", props);
   // _id:               <string session id>
   // class_id:          <string id>
   // contract_id:       <string id>
@@ -71,17 +71,19 @@ export const Session = (props) => {
   // travelling_time:   <minutes from previous location></minutes>
   // proposal:          <true if set by School>
 
-  const { height, _id, scheduled, weekIndex, day } = props
+  const {
+    height,
+    _id,
+    scheduled,
+    weekIndex,
+    day,
+    dragStart,
+    dragEnd
+  } = props
+  
   if (!height) {
     return ""
   }
-
-
-  const {
-    dragStart,
-    dragEnd
-  } = useContext(TimetableContext)
-
 
   const updateTimetable = () => {
     dragEnd(_id, scheduled, weekIndex, day)
