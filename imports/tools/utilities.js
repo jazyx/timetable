@@ -838,13 +838,13 @@ export const getElementIndex = (element, parentTag) => {
  *   day:      <0 - 6: week day at midnight this morning>
  * }
  */
-export const getTimeValues = (timeZone) => {
+export const getTimeValues = (timeZone, now = new Date()) => {
   // Get the current time in GMT
-  const now = new Date()
   // 2022-12-02T21:00:00.000Z ("Europe/Moscow")
 
-  // Express this in the timeZone of the operating system:
-  // 04/12/2022, 19:51:30
+  // Express this in the timeZone of the operating system,
+  // but using British time format, so that the date can be
+  // retrieved as DD/MM/YYYY: "25/12/2022, 12:34:56"
   let isoString
   try {
     isoString = now.toLocaleString( "en-GB", { timeZone })
@@ -1014,7 +1014,7 @@ export const getZoneTime = (dateTime, timeZone) => {
 /**
  * Returns a date like "Mon 5 Dec" or "пн 5 дек." in the
  * format defined by isoCode.
- * 
+ *
  * If isoCode is invalid, the browser interface language will
  * automatically be used by default.
  */

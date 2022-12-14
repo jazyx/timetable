@@ -226,7 +226,6 @@ export const SessionTracker = (props) => {
 
         // Place this dated session
         const { days: column } = getTimeBetween(monday, date)
-        // <<< WET // WET // WET // WET // WET // WET //
         const daySlot  = sessionMap[column]
                       || (sessionMap[column] = {})
         // + 1 allows for a header cell
@@ -236,10 +235,8 @@ export const SessionTracker = (props) => {
           ...session,
           column,
           row,
-          height,
-          dated: true
+          height
         }
-        // WET // WET // WET // WET // WET // WET >>>//
 
         // Remember which week it was placed in.
         const week      = parseInt(column / 7)
@@ -285,7 +282,10 @@ export const SessionTracker = (props) => {
                 column,
                 row,
                 height,
-                scheduled
+                // additional properties for repeating sessions
+                scheduled,
+                day,
+                weekIndex
               }
             }
           }

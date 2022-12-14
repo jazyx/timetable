@@ -8,8 +8,6 @@ import {
 
 
 
-
-
 const StyledSession = styled.div`
   position: absolute;
   display: flex;
@@ -32,9 +30,9 @@ const StyledSession = styled.div`
     : "inherit"
   )};
 
-  ${props => props.dated
-           ? `border: inset 2px #999};`
-           : "border: none;"
+  ${props => props.scheduled
+           ? "border: none;"
+           : `border: inset 2px #999};`
   }
   pointer-events: all;
   cursor: grab;
@@ -45,7 +43,7 @@ const StyledSession = styled.div`
 `
 
 export const Session = (props) => {
-  // console.log("Session props:", props);
+  console.log("Session props:", props);
   // _id:               <string session id>
   // class_id:          <string id>
   // contract_id:       <string id>
@@ -59,20 +57,21 @@ export const Session = (props) => {
   // duration:          <integer minutes>
   // height:            <duration / 5>
   //
-  // proposal:          <true if set by School>
-  //
   // repeat_from_date:  <Date>
   // scheduled:         <Date>
+  // day:               <integer day number>
+  // weekIndex:         <integer index of weeks since monday>
   // OR
   // date:              <Date>
   // start_date:        <Date>
   // end_date:          <"" | Date>
-
+  //
   // link:              <url for online meeting>
   // location:          <url for meeting address>
   // travelling_time:   <minutes from previous location></minutes>
+  // proposal:          <true if set by School>
 
-  const { height, _id, scheduled } = props
+  const { height, _id, scheduled, weekIndex, day } = props
   if (!height) {
     return ""
   }
@@ -85,7 +84,7 @@ export const Session = (props) => {
 
 
   const updateTimetable = () => {
-    dragEnd(_id, scheduled)
+    dragEnd(_id, scheduled, weekIndex, day)
   }
 
 

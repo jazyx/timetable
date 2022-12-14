@@ -36,14 +36,9 @@ export const TimetableProvider = ({children}) => {
   const [ monday, setMonday ] = useState(new Date())
   const [ day, setDay ] = useState(0)
   const [ weekStart, setWeekStart ] = useState(new Date())
-  const [ schedule, setSchedule ] = useState({})
   const [ endTime, setEndTime ] = useState(new Date())
   const [ daysToDisplay, setDaysToDisplay ] = useState(8)
 
-
-  const setStartOfWeek = (startOfWeek) => {
-    setWeekStart(startOfWeek)
-  }
 
   // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
   const setDateValues = () => {
@@ -156,14 +151,29 @@ export const TimetableProvider = ({children}) => {
     const timeOffset = (row * 5) * 60 * 1000
     // ... and save it in dragData so that it will be available
     // in the dragEnd listener
-    dragData.current.date = new Date(
+
+    const date = new Date(
       weekStart.getTime() + dayOffset + timeOffset
     )
+    const dropWeek = Math.floor(column / 7)
+    dragData.current = { ...dragData.current, date, dropWeek }
   }
 
 
-  const dragEnd = (_id, scheduled) => {
-    const { session, ghost, date } = dragData.current
+  /**
+   * _id:       id of session to reschedule
+   * scheduled: currently scheduled Date of this session
+   * weekIndex: integer week count since monday of this session
+   */
+  const dragEnd = ( _id, scheduled, weekIndex, day ) => {
+    console.log("scheduled:", scheduled);
+
+    const { session, ghost, date, dropWeek } = dragData.current
+    let weekStart // undefined/falsy by default
+    if (dropWeek !== weekIndex) {
+      // Determine the monday/weekStart for the dropWeek
+      ({ monday: weekStart } = getTimeValues(timeZone, date))
+    }
 
     // Clean up the timetable DOM
     ghost.remove()
@@ -175,7 +185,9 @@ export const TimetableProvider = ({children}) => {
       rescheduleSession.call({
         _id,
         scheduled,
-        date,
+        weekStart,
+        day,
+        date
       })
     }
   }
