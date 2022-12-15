@@ -16,6 +16,8 @@ import styled from "styled-components"
  *  }
  */
 export const StyledGrid = styled.div`
+  ${props => console.log("Grid props:", props)}
+  
   --full-height: 85vh; /* TO BE CALCULATED */
   --line-color: #666;
   --even-color: #ffffff08;
@@ -45,10 +47,10 @@ export const StyledGrid = styled.div`
 
     /* height and width */
     & div { /* Depends on the number of columns and borders*/
-      // --columns: ${props => props.columns};
+      --columns: ${props => props.columns};
       // --borders: calc((var(--columns) + 3)px);
       // width: calc((100vw - var(--borders)) / var(--columns));
-      width: calc((100vw - 10px) / 8);
+      width: calc((100vw - 10px) / var(--columns));
     }
 
     /* Styling of 5-minute slots */

@@ -15,7 +15,7 @@ import { Launch }  from './components/Launch.jsx';
 import { Home }  from './components/Home.jsx';
 import { Company }  from './components/Company.jsx';
 import { School }   from './components/School.jsx';
-import { Observer } from './components/Observer.jsx';
+import { Observer } from './components/Observer/Observer.jsx';
 import { Student }  from './components/Student.jsx';
 import { Teacher }  from './components/Teacher/Teacher.jsx';
 import { NotFound }  from './components/NotFound.jsx';
@@ -39,7 +39,7 @@ export const App = () => {
 
             <Route path="o/:observer_id">
               <Route
-                path=":teacher_id/*"
+                path=":teacher_name/*"
                 element={<Observer />}
               />
               <Route

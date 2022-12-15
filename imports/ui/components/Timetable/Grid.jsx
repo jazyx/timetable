@@ -42,7 +42,6 @@ import { Session } from '../Timetable/Session'
 
 
 export const Grid = (props) => {
-  console.log("Grid component called:", props)
   const {
     dragEnter,
     dragOver,
@@ -61,7 +60,7 @@ export const Grid = (props) => {
     blocked={}
   } = props // from SessionTracker.jsx
 
-
+  
   const grid = sessions.reduce(buildGrid, [])
 
 

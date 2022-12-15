@@ -93,12 +93,13 @@ export const SessionTracker = (props) => {
     teacher_name,
     monday,
     endTime,
-    timeZone
+    timeZone,
+    hidePast
   } = props
   let daysToDisplay
   const now = new Date()
   const createDated = []
-
+  
 
   const teacherData = Teacher.findOne({ name: teacher_name })
   // {
@@ -218,7 +219,17 @@ export const SessionTracker = (props) => {
   const getSessions = () => {
     const classes = getClasses()
     const { treated, sessions } = getTreatedSessionsMap()
-    return classes.reduce(getSessionMap, sessions)
+    // Map all sessions since monday
+    const sessionMap = classes.reduce(getSessionMap, sessions)
+
+    if (hidePast) {
+      // Remove day/column arrays for days before today
+      const { days: yesterday } = getTimeBetween(monday, now)
+      sessionMap.splice(0, yesterday)
+      daysToDisplay -= yesterday
+    }
+
+    return sessionMap
 
     function getSessionMap(sessionMap, classDoc) {
       // { "name":            <string>
@@ -391,6 +402,7 @@ export const SessionTracker = (props) => {
     rows,
     sessions,
     daysToDisplay,
+    hidePast,
     createDated
   }
 }

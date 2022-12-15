@@ -100,6 +100,8 @@ export const TimetableProvider = ({children}) => {
   const [ weekStart, setWeekStart ] = useState(new Date())
   const [ endTime, setEndTime ] = useState(new Date())
   const [ daysToShow, setDaysToShow ] = useState(8)
+  const [ hidePast, setHidePast ] = useState(false)
+  
 
 
   // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
@@ -113,7 +115,7 @@ export const TimetableProvider = ({children}) => {
     setEndTime(endTime)
   }
 
-  useEffect(setDateValues, [ timeZone ])
+  useEffect(setDateValues, [ timeZone, daysToShow ])
   // TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE >>> //
 
 
@@ -330,6 +332,8 @@ export const TimetableProvider = ({children}) => {
         endTime,
         daysToShow,
         setDaysToShow,
+        hidePast,
+        setHidePast,
         timeZone,
         setTimeZone,
         setWeekStart,

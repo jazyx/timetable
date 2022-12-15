@@ -53,7 +53,7 @@ import { useTracker } from 'meteor/react-meteor-data'
 
 import { TimetableContext } from '/imports/ui/contexts/TimetableContext.jsx';
 
-import { SessionTracker } from './SessionTracker'
+import { SessionTracker } from '../SessionTracker'
 import { TeacherToolbar } from './TeacherToolbar'
 import { Grid } from '../Timetable/Grid'
 
@@ -79,7 +79,12 @@ export const Teacher = () => {
   //   teacher_name
   //   + other unused properties
   // }
-  const { monday, setWeekStart } = context
+  const {
+    monday,
+    setWeekStart,
+    setDaysToShow,
+    setHidePast
+  } = context
 
 
   const props = useTracker(() => SessionTracker(context))
@@ -111,6 +116,9 @@ export const Teacher = () => {
     createDated.forEach(session => {
       createDatedSession.call(session)
     })
+
+    setDaysToShow(8)
+    setHidePast(false)
   }, []) // Dependency array required to prevent circular calls
 
 
