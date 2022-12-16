@@ -22,10 +22,10 @@ const StyledBar = styled.div`
 `
 
 
-export const ObserverToolbar = ({observer_name, teacher_name}) => {
+export const ObserverToolbar = ({observer_id, teacher_name}) => {
   return (
     <StyledBar>
-      <span className="name">{observer_name} </span>
+      <span className="name">{observer_id} </span>
       <span className="name">{teacher_name} </span>
       <span className="tools">(tools will go here)</span>
       <TimeZones />

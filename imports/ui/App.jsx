@@ -11,14 +11,14 @@ import {
 import { TimetableProvider } from './contexts/TimetableContext'
 
 
-import { Launch }  from './components/Launch.jsx';
-import { Home }  from './components/Home.jsx';
+import { Launch }   from './components/Launch.jsx';
+import { Home }     from './components/Home.jsx';
 import { Company }  from './components/Company.jsx';
 import { School }   from './components/School.jsx';
 import { Observer } from './components/Observer/Observer.jsx';
 import { Student }  from './components/Student.jsx';
 import { Teacher }  from './components/Teacher/Teacher.jsx';
-import { NotFound }  from './components/NotFound.jsx';
+import { NotFound } from './components/NotFound.jsx';
 
 export const App = () => {
 

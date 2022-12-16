@@ -81,8 +81,8 @@ export const Session = (props) => {
     dragStart,
     dragEnd
   } = props
-  
-  
+
+
   if (!height) {
     return ""
   }

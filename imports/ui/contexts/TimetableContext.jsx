@@ -90,7 +90,7 @@ export const TimetableProvider = ({children}) => {
   const [ ready, setReady ] = useState(false)
 
   // Prepare to get 00:00 this morning, and 00:00 on Monday
-  // in the timezone of the OS. Use placeholder dates 
+  // in the timezone of the OS. Use placeholder dates
   // setDateValues() useEffect is triggered.
   const [ timeZone, setTimeZone ] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -102,7 +102,7 @@ export const TimetableProvider = ({children}) => {
   const [ daysToShow, setDaysToShow ] = useState(8)
   const [ hidePast, setHidePast ] = useState(false)
   const [ dragState, setDragState ] = useState("none")
-  
+
 
 
   // <<< TIMEZONE // TIMEZONE // TIMEZONE // TIMEZONE //
