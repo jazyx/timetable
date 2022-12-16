@@ -94,11 +94,12 @@ export const SessionTracker = (props) => {
     monday,
     endTime,
     timeZone,
-    hidePast
+    hidePast,
+    dragState,
   } = props
   let daysToDisplay
   const now = new Date()
-  const createDated = []
+  const createDated = []  
   
 
   const teacherData = Teacher.findOne({ name: teacher_name })
@@ -298,6 +299,14 @@ export const SessionTracker = (props) => {
       }
 
 
+      function getDraggable() {
+        switch (dragState) {
+          case "all":  return true
+          case "none": return false
+        }
+      }
+
+
       function placeDatedSession(session) {
         const {
           date,
@@ -312,6 +321,7 @@ export const SessionTracker = (props) => {
         // retrieved and used to calculate the number of slots
         // required before the next session while dragging.
         const height = duration / 5
+        const draggable = getDraggable()
 
         // Place this dated session
         const { days: column } = getTimeBetween(monday, date)
@@ -324,7 +334,8 @@ export const SessionTracker = (props) => {
           ...session,
           column,
           row,
-          height
+          height,
+          draggable
         }
 
         // Remember which week it was placed in.
@@ -348,6 +359,8 @@ export const SessionTracker = (props) => {
         } = session
 
         const height = duration / 5
+        const draggable = getDraggable()
+
         // Determine which day of the week the repeating session
         // is expected
         const { day } = getZoneTime(repeat_from_date, timeZone)
@@ -378,7 +391,8 @@ export const SessionTracker = (props) => {
                 // additional properties for repeating sessions
                 scheduled,
                 day,
-                weekIndex
+                weekIndex,
+                draggable
               }
             }
           }

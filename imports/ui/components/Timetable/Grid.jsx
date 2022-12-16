@@ -60,7 +60,7 @@ export const Grid = (props) => {
     blocked={}
   } = props // from SessionTracker.jsx
 
-  
+
   const grid = sessions.reduce(buildGrid, [])
 
 

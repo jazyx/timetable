@@ -42,7 +42,8 @@ export const Observer = () => {
     monday,
     setWeekStart,
     setDaysToShow,
-    setHidePast
+    setHidePast,
+    setDragState
   } = context
 
 
@@ -78,6 +79,7 @@ export const Observer = () => {
 
     setDaysToShow(2)
     setHidePast(true)
+    setDragState("none")
   }, []) // Dependency array required to prevent circular calls
 
 

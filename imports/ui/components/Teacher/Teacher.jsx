@@ -83,7 +83,8 @@ export const Teacher = () => {
     monday,
     setWeekStart,
     setDaysToShow,
-    setHidePast
+    setHidePast,
+    setDragState
   } = context
 
 
@@ -119,6 +120,7 @@ export const Teacher = () => {
 
     setDaysToShow(8)
     setHidePast(false)
+    setDragState("all")
   }, []) // Dependency array required to prevent circular calls
 
 

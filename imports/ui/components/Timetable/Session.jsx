@@ -35,7 +35,7 @@ const StyledSession = styled.div`
            : `border: inset 2px #999};`
   }
   pointer-events: all;
-  cursor: grab;
+  cursor: ${props => props.draggable ? "grab" : "default"};
 
   &.dragged {
     opacity: 0.3333;
@@ -68,7 +68,7 @@ export const Session = (props) => {
   //
   // link:              <url for online meeting>
   // location:          <url for meeting address>
-  // travelling_time:   <minutes from previous location></minutes>
+  // travelling_time:   <minutes from previous location>
   // proposal:          <true if set by School>
 
   const {
@@ -77,9 +77,11 @@ export const Session = (props) => {
     scheduled,
     weekIndex,
     day,
+    draggable,
     dragStart,
     dragEnd
   } = props
+  
   
   if (!height) {
     return ""
@@ -93,7 +95,7 @@ export const Session = (props) => {
   return (
     <StyledSession
       { ...props }
-      draggable
+      draggable={draggable}
       onDragStart={dragStart}
       onDragEnd={updateTimetable}
       className="session"

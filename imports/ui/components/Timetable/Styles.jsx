@@ -16,8 +16,6 @@ import styled from "styled-components"
  *  }
  */
 export const StyledGrid = styled.div`
-  ${props => console.log("Grid props:", props)}
-  
   --full-height: 85vh; /* TO BE CALCULATED */
   --line-color: #666;
   --even-color: #ffffff08;
