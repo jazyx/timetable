@@ -5,7 +5,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Calendar } from '../Calendar'
+import { Calendar } from '../Timetable/Calendar'
 import { TeacherToolbar } from './TeacherToolbar'
 
 
