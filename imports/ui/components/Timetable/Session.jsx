@@ -46,7 +46,7 @@ export const Session = (props) => {
   // console.log("Session props:", props);
   // _id:               <string session id>
   // class_id:          <string id>
-  // contract_id:       <string id>
+  // assignment_id:       <string id>
   // name:              <class name>
   // students:          [<student name>, ...]
   //

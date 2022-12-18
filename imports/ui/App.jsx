@@ -13,7 +13,7 @@ import { TimetableProvider } from './contexts/TimetableContext'
 
 import { Launch }   from './components/Launch.jsx';
 import { Home }     from './components/Home.jsx';
-import { Company }  from './components/Company.jsx';
+import { Client }   from './components/Client.jsx';
 import { School }   from './components/School.jsx';
 import { Observer } from './components/Observer/Observer.jsx';
 import { Student }  from './components/Student.jsx';
@@ -34,7 +34,7 @@ export const App = () => {
             {/* Paths wrapped by Launch go here */}
             {/* Paths that end with /* will ignore extra params */}
             <Route index element={<Home />} />
-            <Route path="c/:company_id/*" element={<Company />} />
+            <Route path="c/:client_id/*" element={<Client />} />
             <Route path="e/:school_id/*" element={<School />} />
 
             <Route path="o/:observer_id">

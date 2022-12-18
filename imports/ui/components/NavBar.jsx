@@ -41,7 +41,7 @@ export const NavBar = () => {
     <StyledNav>
       <li><Link to="/">Home</Link></li>
       <li><Link to="/s/school">School</Link></li>
-      <li><Link to="/c/company">Company</Link></li>
+      <li><Link to="/c/client">Client</Link></li>
       <li><Link to="/t/James">Teacher</Link></li>
       <li><Link to="/s/student/teacher">Student</Link></li>
       <li><Link to="/o/o/James">Observer</Link></li>

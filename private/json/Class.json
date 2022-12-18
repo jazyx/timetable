@@ -1,7 +1,7 @@
 [
   {
     "name": "Вячеслав Соколов",
-    "contract_id": "Y7mozM8TrAZ6nJ7DX",
+    "assignment_id": "Y7mozM8TrAZ6nJ7DX",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -14,7 +14,7 @@
   },
   {
     "name": "Андрей",
-    "contract_id": "uLCYZtQvT45pjoWMA",
+    "assignment_id": "uLCYZtQvT45pjoWMA",
     "start_date": "2023-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -27,7 +27,7 @@
   },
   {
     "name": "Алекс",
-    "contract_id": "Db68TSyb2sLcgAr8C",
+    "assignment_id": "Db68TSyb2sLcgAr8C",
     "start_date": "2021-11-24T21:00:00.000Z",
     "end_date": "2022-11-24T21:00:00.000Z",
     "students": [],
@@ -40,7 +40,7 @@
   },
   {
     "name": "E05-A",
-    "contract_id": "MdSSrX99k7TzSx7NL",
+    "assignment_id": "MdSSrX99k7TzSx7NL",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "2023-11-24T21:00:00.000Z",
     "students": [],

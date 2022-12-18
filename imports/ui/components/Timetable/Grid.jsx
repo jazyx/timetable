@@ -86,7 +86,7 @@ export const Grid = (props) => {
     //   {
     //     _id:              <id string>
     //     class_id:         <id string>
-    //     contract_id:      <id string>
+    //     assignment_id:      <id string>
     //     name:             <string Class.name>
     //     students:         [<string student name>, ...]
     //     index:            <integer class number in week>

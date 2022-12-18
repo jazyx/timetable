@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styled from "styled-components"
 
+import { TimetableContext } from '/imports/ui/contexts/TimetableContext.jsx';
+
 import { TimeZones } from '../Timetable/TimeZones'
+import { Planner } from '../Planner/Planner'
 
 
 
@@ -23,11 +26,27 @@ const StyledBar = styled.div`
 
 
 export const TeacherToolbar = ({teacher_name}) => {
+  const {
+    showPlanner,
+    setShowPlanner
+  } = useContext(TimetableContext)
+  
+
+  const planner = showPlanner
+                ? <Planner />
+                : ""
+
   return (
     <StyledBar>
       <span className="name">{teacher_name} </span>
-      <span className="tools">(tools will go here)</span>
+      <button
+        className="organizer"
+        onClick={() => setShowPlanner(true)}
+      >
+        Organizer
+      </button>
       <TimeZones />
+      {planner}
     </StyledBar>
   );
 };

@@ -99,9 +99,13 @@ export const TimetableProvider = ({children}) => {
   const [ monday, setMonday ] = useState(new Date())
   const [ weekStart, setWeekStart ] = useState(new Date())
   const [ endTime, setEndTime ] = useState(new Date())
+
   const [ daysToShow, setDaysToShow ] = useState(8)
   const [ hidePast, setHidePast ] = useState(false)
   const [ dragState, setDragState ] = useState("none")
+
+const [ showPlanner, setShowPlanner ] = useState(true)
+
 
 
 
@@ -346,7 +350,10 @@ export const TimetableProvider = ({children}) => {
         dragEnter,
         dragOver,
         dragEnd,
-        drop
+        drop,
+
+        showPlanner,
+        setShowPlanner
       }}
     >
       {children}
