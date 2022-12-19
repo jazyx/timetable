@@ -1,178 +1,15 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components"
 
 import { UserContext } from  '/imports/ui/contexts/UserContext.jsx'
 
+import methods from '/imports/api/methods/'
+const {
+  registerUser,
+  logUserIn
+} = methods
 
-
-const StyledForm = styled.div`
-  --font-size:    7vw;
-  --input-width:  12em;
-  --peek-width:   1.5em;
-  --pass-width:   calc(var(--input-width) - var(--peek-width));
-  --button-width: calc(var(--pass-width) / 2);
-  --green:        #090;
-  --red:          #c00;
-
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-
-  font-size: var(--font-size);
-
-  & * {
-    box-sizing: border-box;
-  }
-
-  /* Rules for the Please log in or register message */
-  & .instructions {
-    margin-bottom: 0.5em;
-    text-align: center;
-
-    /* Current action word shown in bold and green */
-    & strong {
-      color: var(--green);
-    }
-
-    /* Alternative action shown as a subtle button */
-    & button {
-      background-color: transparent;
-      border: #fff6 outset 2px;
-      border-radius: 0.25em;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    & button:hover {
-      border-style: solid;
-      background-color: #222;
-    }
-
-    & button:active {
-      border-style: inset;
-      background-color: #000;
-    }
-
-    /* Rules for As a teacher / school radio buttons */
-    & label {
-      width: 10em;
-      margin-top: 0.25em;
-    
-      & input {
-        width: 1em;
-        height: 1em;
-        accent-color: var(--green);
-      }
-
-      & span {
-        display: inline-block;
-        text-align: left;
-        width: 6em;
-        margin-left: 0.5em;
-      }
-    }
-  }
-
-  /* Rules for input fields and their labels */
-  & label {
-    display: block;
-    vertical-align: bottom;
-
-    /* Show label span above the input field*/
-    & span {
-      display: block;
-      margin-top: 0.5em;
-    }
-
-    & input {
-      width: var(--input-width);
-      height: 1.4em;
-    }
-
-    /* Shorten password field to give room for peek button */
-    & input#password {
-      width: var(--pass-width);
-    }
-
-    /* Show a red border around fields that are empty */
-    & input.invalid {
-      border: 1px solid var(--red);
-    }
-
-    /* Show invalid email address */
-    & input:invalid {
-      background-color: #fcc;
-    }
-
-    /* Peek at password button */
-    & button {
-      width: var(--peek-width);
-      height: 1.4em;
-      padding: 0;
-      border-radius: 1em;
-    }
-  }
-
-  /* Log in | Register button */
-  & .action {
-    margin-top: 2em;
-    width: var(--input-width);
-    background-color: var(--green);
-    border-color: var(--green);
-  }
-
-  & .action[disabled] {
-    color: #666;
-    background-color: #333;
-    border-style: solid;
-    border-color: #050;
-  }
-
-  & input,
-  & button {
-    font-size: inherit;
-  }
-
-  & ul.errors {
-    position: absolute;
-    margin-top: 0.5em;
-    width: var(--input-width);
-    min-height: 3em;
-    color: var(--red);
-    background-color: #111c;
-    padding: 0;
-
-    & li {
-      font-size: 0.67em;
-      margin: 0;
-      position: relative;
-      left: 1em;
-    }
-
-    & li:first-child {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      left: 0;
-    }
-  }
-
-  @media (min-aspect-ratio: 1/2) {
-    & {
-      font-size: 3.5vh;
-    }
-  } 
-`
-
-
-import { register, logIn } from '/imports/api/user.js'
+import { StyledForm } from './FormStyles'
 
 
 
@@ -187,7 +24,9 @@ export default function Form() {
   const [ email, setEmail ] = useState("")
   const [ password, setPassword ] = useState("")
   const [ isTeacher, setIsTeacher ] = useState(true)
-  
+  const [ logInstead, setLogInstead ] = useState(false)
+
+
   // Check if any fields are empty ...
   const fields = { name, email, password }
   const invalid = Object.entries(fields).map( entry => {
@@ -204,7 +43,7 @@ export default function Form() {
       errors.push(" be 8 characters or more");
     }
     if (password.search(/[a-z]/) < 0) {
-      errors.push(" contain at least one lowercase letter"); 
+      errors.push(" contain at least one lowercase letter");
     }
     if (password.search(/[A-Z]/) < 0) {
       errors.push(" contain at least one uppercase letter")
@@ -217,19 +56,39 @@ export default function Form() {
     }
 
     const errorCount = errors.length
+    
 
     let passwordErrors = ""
     if (errorCount) {
+      invalid.push("password")
+      
       const lines = []
-      passwordErrors = "Your password must"
+      passwordErrors = "Your password should"
 
       if (errorCount === 1) {
-        lines.push(<li>{passwordErrors} {errors[0]}</li>)
+        lines.push(
+          <li
+            key="error"
+          >
+            {passwordErrors} {errors[0]}.
+          </li>)
 
-      } else {
-        lines.push(<li>{passwordErrors}:</li>)
+      } else {  
+        lines.push(
+          <li
+            key="title"
+          >
+            {passwordErrors}:
+          </li>
+        )
         errors.forEach( error => (
-          lines.push(<li>{error}</li>)
+          lines.push(
+            <li
+              key={error}
+            >
+              {error}
+            </li>
+          )
         ))
       }
 
@@ -242,20 +101,20 @@ export default function Form() {
 
     return passwordErrors
   })()
-  
 
 
+  // Check if action button should be enabled
   const enabled = (() => {
     let enabled = !passwordErrors
-    
+
     if (enabled) {
       enabled = !document.querySelector(":invalid")
     }
 
     if (enabled) {
       const invalidCount = invalid.length
-      enabled = !(invalidCount) 
-              || ( useLog 
+      enabled = !(invalidCount)
+              || ( useLog
                 && invalidCount === 1
                 && invalid.includes("name")
                  )
@@ -263,8 +122,8 @@ export default function Form() {
 
     return enabled
   })()
-  
-  
+
+
   // const navigate = useNavigate()
 
   // const setMessage = (source, text) => {
@@ -275,22 +134,43 @@ export default function Form() {
   // }
 
 
+  // Editing input fields
+  const reset = () => {
+    if (logInstead) {
+      setLogInstead(false)
+    }
+  }
+
+
   const updateName = (event) => {
+    reset()
     setName(event.target.value)
   }
 
+
   const updateEmail = (event) => {
+    reset()
     setEmail(event.target.value)
   }
 
+
   const updatePassword = (event) => {
+    reset()
     setPassword(event.target.value)
   }
 
 
   const toggleVisibility = (event) => {
+    reset()
     event.preventDefault()
     setShowPassword(!showPassword)
+  }
+
+
+  const sendPasswordLink = (event) => {
+    event.preventDefault()
+    console.log("TODO: use email to send passwordreset link");
+    
   }
 
 
@@ -300,10 +180,17 @@ export default function Form() {
     const formData = {
       name,
       email,
-      password
+      password,
+      role: (isTeacher) ? "teacher" : "school"
     }
 
-    const callback = (response) => {
+    const callback = (fail, response) => {
+      if (fail) {
+        return console.log("Error in Register:", fail);
+      }
+
+      // console.log("response:", response)
+      // One of:
       // { error: "Missing data", userData }
       // { _id: <string> }
       // { message: "email address ... is registered. Log in?" }
@@ -311,12 +198,21 @@ export default function Form() {
       const { _id, message, error } = response
       if (error) {
         let { name, email, password } = error.userData
+        console.log("error:", error.userData);
+        console.log("THIS SHOULDN'T HAPPEN")
+
+      } else if (message) {
+        setLogInstead(true)
+
+      } else if (_id) {
+        // TODO: Navigate to holding page while the user
+        // checks their email
+        console.log("Logged in as:", _id);
+
       }
-      console.log("response:", response);
     }
 
-    const message = register(formData, callback)
-    console.log("message:", message);
+    registerUser.call(formData, callback)
   }
 
 
@@ -351,25 +247,33 @@ export default function Form() {
         <div
           className="instructions"
         >
-          Please <strong>log in</strong> or&nbsp;
+          <span>Please </span>
+          <strong
+            className="choice"
+          >
+            log in
+          </strong>
+          <span> or </span>
           <button
+            className="toggle-log"
             onClick={(event) => {
               event.preventDefault()
               setUseLog(false)
             }}
           >
-            register
+            <span> register</span>
           </button>:
         </div>
       )
     }
-    
+
     return (
       <div
         className="instructions"
       >
-        Please&nbsp;
+        <span>Please </span>
         <button
+          className="toggle-log"
           onClick={(event) => {
             event.preventDefault()
             setUseLog(true)
@@ -377,25 +281,39 @@ export default function Form() {
         >
           log in
         </button>
-        &nbsp;or <strong>register</strong>
+        <span> or </span>
+          <strong
+            className="choice"
+          >
+            register
+          </strong>
         <label htmlFor="as-teacher">
           <input
             type="radio"
             name="role"
             id="as-teacher"
-            defaultChecked
+            checked={isTeacher}
             onChange={toggleIsTeacher}
           />
-          <span>As a teacher</span>
+          <span
+            className={isTeacher ? "choice" : ""}
+          >
+            As a teacher
+          </span>
         </label>
         <label htmlFor="as-school">
           <input
             type="radio"
             name="role"
             id="as-school"
+            checked={!isTeacher}
             onChange={toggleIsTeacher}
           />
-          <span>As a school</span>
+          <span
+            className={isTeacher ? "" : "choice"}
+          >
+            As a school
+          </span>
         </label>
       </div>
     )
@@ -422,37 +340,57 @@ export default function Form() {
           Log in
         </button>
       )
+
+    }
+
+    let alreadyRegistered = ""
+    if (logInstead) {
+      alreadyRegistered = (
+        <div
+          className="already-registered"
+        >
+          <p>
+            <span>The email address </span>
+            <span className="email">{email}</span>
+            <span> is already registered. Would you like to </span>
+            <button
+              className="toggle-log"
+              onClick={() => setUseLog(true)}
+            >
+              log in
+            </button>
+            <span> instead?</span>
+          </p>
+        </div>
+      )
     }
 
     return (
-      <button
-        className="action"
-        onClick={prepareToRegister}
-        disabled={!enabled}
+      <div
+        className="register"
       >
-        Register
-      </button>
+        <button
+          className="action"
+          onClick={prepareToRegister}
+          disabled={!enabled}
+        >
+          Register
+        </button>
+        {alreadyRegistered}
+      </div>
     )
   })()
 
 
-  const nameInput = (() => {
-    if (!useLog) {
-      return (
-        <label htmlFor="name">
-          <span>{nameTitle}:</span>
-          <input
-            type="text"
-            id="name"
-            className={invalid.includes("name") ? "invalid" : ""}
-            name="name"
-            value={name}
-            onChange={updateName}
-          />
-        </label>
-      )
-    }
-  })()
+  const forgotPassword = (() => (
+    <a
+      className={useLog ? "" : "hidden"}
+      onClick={sendPasswordLink}
+      href="#"
+    >
+      Forgot password?
+    </a>
+  ))()
 
 
   return (
@@ -463,7 +401,20 @@ export default function Form() {
       >
         {instructions}
 
-        {nameInput}
+        <label
+          htmlFor="name"
+          className={useLog ? "hidden" : ""}
+        >
+          <span>{nameTitle}:</span>
+          <input
+            type="text"
+            id="name"
+            className={invalid.includes("name") ? "invalid" : ""}
+            name="name"
+            value={name}
+            onChange={updateName}
+          />
+        </label>
 
         <label htmlFor="email">
           <span>Email address:</span>
@@ -492,7 +443,8 @@ export default function Form() {
           >
             {showPassword ? "🙉" :"🙈"}
           </button>
-          {password && passwordErrors}
+          {!useLog ? (password && passwordErrors) : ""}
+          {forgotPassword}
         </label>
 
         {button}

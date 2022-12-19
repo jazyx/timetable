@@ -21,14 +21,15 @@ export const registerUser = {
     new SimpleSchema({
       name:     { type: String },
       email:    { type: String },
-      password: { type: String }
+      password: { type: String },
+      role:     { type: String }
     }).validate(userData)
   }
 
 , run(userData) {
-    let { name, email, password } = userData
+    let { name, email, password, role } = userData
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role ) {
       return { error: "Missing data", userData }
     }
 
