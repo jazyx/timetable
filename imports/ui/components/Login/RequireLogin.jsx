@@ -7,12 +7,18 @@ import { Navigate } from 'react-router-dom'
 import { UserContext } from '/imports/ui/contexts/UserContext.jsx';
 
 export const RequireLogin = ({ children, redirectTo }) => {
-  const { token } = useContext(UserContext);
+  const { idData } = useContext(UserContext);
   
-  console.log("token:", token);
-  
+  // console.log("idData:", idData);
+  // {}
+  //   OR
+  // { _id:             "FzJtDnE3yNmcbzGcb",
+  //   name:            "James",
+  //   role:            "teacher",
+  //   email_confirmed: true
+  // }
      
-  return token
+  return idData.role
        ? children
        : <Navigate to={redirectTo} />;
 }

@@ -44,10 +44,10 @@ export const NavBar = () => {
   return (
     <StyledNav>
       <li ><Link to="/">Home</Link></li>
-      <li ><Link to="/n/e/school">School</Link></li>
-      <li ><Link to="/n/t/James">Teacher</Link></li>
-      <li ><Link to="/n/s/student/teacher">Student</Link></li>
-      <li ><Link to="/n/o/o/James">Observer</Link></li>
+      <li ><Link to="/n/school/school">School</Link></li>
+      <li ><Link to="/n/teacher/James">Teacher</Link></li>
+      <li ><Link to="/n/student/student/teacher">Student</Link></li>
+      <li ><Link to="/n/observer/Александра/James">Observer</Link></li>
       <li ><Link to="/not-found">Not Found</Link></li>
     </StyledNav>
   );

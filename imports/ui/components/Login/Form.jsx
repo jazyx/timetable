@@ -15,14 +15,16 @@ import { StyledForm } from './FormStyles'
 
 export default function Form() {
   const {
+    setIdData,
     useLog,
     setUseLog
   } = useContext(UserContext)
+  const navigate = useNavigate()
 
   const [ showPassword, setShowPassword ] = useState(false)
-  const [ name, setName ] = useState("")
-  const [ email, setEmail ] = useState("")
-  const [ password, setPassword ] = useState("")
+  const [ name, setName ] = useState("James")
+  const [ email, setEmail ] = useState("james@lexogram.com")
+  const [ password, setPassword ] = useState("TIiudhtm1!LE")
   const [ isTeacher, setIsTeacher ] = useState(true)
   const [ logInstead, setLogInstead ] = useState(false)
 
@@ -56,12 +58,12 @@ export default function Form() {
     }
 
     const errorCount = errors.length
-    
+
 
     let passwordErrors = ""
     if (errorCount) {
       invalid.push("password")
-      
+
       const lines = []
       passwordErrors = "Your password should"
 
@@ -73,7 +75,7 @@ export default function Form() {
             {passwordErrors} {errors[0]}.
           </li>)
 
-      } else {  
+      } else {
         lines.push(
           <li
             key="title"
@@ -170,11 +172,11 @@ export default function Form() {
   const sendPasswordLink = (event) => {
     event.preventDefault()
     console.log("TODO: use email to send passwordreset link");
-    
+
   }
 
 
-  const prepareToRegister = async (event) => {
+  const registerNewUser = async (event) => {
     event.preventDefault()
 
     const formData = {
@@ -190,12 +192,12 @@ export default function Form() {
       }
 
       // console.log("response:", response)
-      // One of:
+      // // Will be one of:
       // { error: "Missing data", userData }
       // { _id: <string> }
       // { message: "email address ... is registered. Log in?" }
 
-      const { _id, message, error } = response
+      const { email, message, error } = response
       if (error) {
         let { name, email, password } = error.userData
         console.log("error:", error.userData);
@@ -204,11 +206,12 @@ export default function Form() {
       } else if (message) {
         setLogInstead(true)
 
-      } else if (_id) {
-        // TODO: Navigate to holding page while the user
-        // checks their email
-        console.log("Logged in as:", _id);
-
+      } else if (email) { // jwt also in response
+        // Update idData to include jwt, to trigger the  Login
+        // component to show the EmailSent page.
+        // TODO: set idData to
+        // { awaitingConfirmation: true, email }
+        setIdData(response)
       }
     }
 
@@ -216,24 +219,33 @@ export default function Form() {
   }
 
 
-  const prepareToLogIn = async (event) => {
+  const login = async (event) => {
     event.preventDefault()
+
+    const callback = (error, data) => {
+      if (data) {
+        const { fail, role, name, message } = data
+
+        if (role) {
+          setIdData(data)
+          const url = `/n/${role}/${name}`
+          navigate(url)
+
+        } else if (message) {
+          setIdData({ awaiting_confirmation: true })
+
+        } else if (fail) {
+          console.log("fail:", fail);
+        }
+      }
+    }
 
     const formData = {
       email,
       password
     }
 
-    const result = await logIn(formData)
-
-    const { token, text } = result
-    if (token) {
-      setToken(result.token)
-      navigate(preLoginURL, { replace: true })
-
-    } else {
-      console.log("Login", text)
-    }
+    logUserIn.call(formData, callback)
   }
 
 
@@ -334,7 +346,7 @@ export default function Form() {
       return (
         <button
           className="action"
-          onClick={prepareToLogIn}
+          onClick={login}
           disabled={!enabled}
         >
           Log in
@@ -371,7 +383,7 @@ export default function Form() {
       >
         <button
           className="action"
-          onClick={prepareToRegister}
+          onClick={registerNewUser}
           disabled={!enabled}
         >
           Register

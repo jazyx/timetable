@@ -4,12 +4,12 @@ import { UserContext } from  '/imports/ui/contexts/UserContext.jsx'
 
 
 export default function LogOut() {
-  const { setToken } = useContext(UserContext)
+  const { setIdData } = useContext(UserContext)
   const navigate = useNavigate()
 
   const logOut = (event) => {
     event.preventDefault()
-    setToken("")
+    setIdData({})
     navigate("/", {replace: true})
   }
 
@@ -19,12 +19,13 @@ export default function LogOut() {
 
   return (
     <>
-    <button
-      className="out"
-      onClick={logOut}
-    >
-      Log Out
-    </button>
+      <p>You are already logged in</p>
+      <button
+        className="out"
+        onClick={logOut}
+      >
+        Log Out
+      </button>
       <button
         className="back"
         onClick={goBack}

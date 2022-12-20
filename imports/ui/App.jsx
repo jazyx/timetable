@@ -16,7 +16,7 @@ import { Launch }       from './components/Launch.jsx';
 import { Home }         from './components/Home.jsx';
 import { Login }        from './components/Login/Login.jsx';
 import { RequireLogin } from './components/Login/RequireLogin.jsx';
-import { Client }       from './components/Client.jsx';
+import { Confirm }       from './components/Login/Confirm.jsx';
 import { School }       from './components/School.jsx';
 import { Observer }     from './components/Observer/Observer.jsx';
 import { Student }      from './components/Student.jsx';
@@ -38,8 +38,9 @@ export const App = () => {
               {/* Paths wrapped by Launch go here */}
               {/* Paths that end with /* will ignore extra params */}
               <Route index element={<Home />} />
-              <Route path="/login" element={<Login />} />assignment
-              <Route path="/not-found/*" element={<NotFound />} />assignment
+              <Route path="/login" element={<Login />} />
+              <Route path="/confirm/:token" element={<Confirm />} />
+              <Route path="/not-found/*" element={<NotFound />} />
 
               {/* PRIVATE ROUTES */}
               <Route
@@ -49,12 +50,18 @@ export const App = () => {
                     redirectTo="/login"
                   >
                     <Routes>
-                      {/* <Route path="c/:client_id/*" element={<Client />} /> */}
-                      <Route path="e/:school_id/*" element={<School />} />
+                      <Route
+                        path="school/:school_id/*"
+                        element={<School />}
+                      />
 
-                      <Route path="t/:teacher_name/*" element={<Teacher />} />assignment
+                      <Route
+                        path="teacher/:teacher_name/*"
+                        element={<Teacher />}
+                      />
 
-                      <Route path="s/:student_id">
+                      <Route
+                        path="student/:student_id">
                         <Route
                           path=":teacher_id/*"
                           element={<Student />}
@@ -63,9 +70,10 @@ export const App = () => {
                           path=""
                           element={<Student />}
                         />
-                      </Route>assignment
+                      </Route>
 
-                      <Route path="o/:observer_id">
+                      <Route
+                        path="observer/:observer_id">
                         <Route
                           path=":teacher_name/*"
                           element={<Observer />}
@@ -77,7 +85,8 @@ export const App = () => {
                       </Route>
 
                       {/*  CATCHALL FOR UNLISTED PATHS */}
-                      <Route path="*" element={
+                      <Route
+                        path="*" element={
                         <Navigate
                           to="/not-found/at-all"
                           replace={true}

@@ -2,6 +2,11 @@
 import SimpleSchema from 'simpl-schema'
 
 import { User } from '../collections/'
+import {
+  jwt_sign,
+  jwt_verify
+} from '../jwt'
+
 
 
 
@@ -42,8 +47,59 @@ export const registerUser = {
     }
 
     const _id = User.insert(userData)
+    const jwt = jwt_sign({ role, name, email })
 
-    return { _id }
+    // TODO:
+    // * Send a message to the given email address
+    // * Return { awaiting_confirmation: true, email }
+
+    return { email, jwt }
+  }
+}
+
+
+export const confirmEmail = {
+  name: "user.confirmEmail"
+
+, call(confirmationData, callback) {
+    const options = {
+      returnStubValue: true
+    , throwStubExceptions: true
+    }
+
+    Meteor.apply(this.name, [confirmationData], options, callback)
+  }
+
+, validate(confirmationData) {
+    new SimpleSchema({
+      token:    { type: String }
+    }).validate(confirmationData)
+  }
+
+, run(confirmationData) {
+    const { token } = confirmationData
+
+    const payload = jwt_verify(token)
+    const { role, name, email } = payload
+    // email will be in lower case, by definition
+
+    if (email) {
+      const $set = { email_confirmed: true }
+      const query = { role, name, email }
+      const success = User.update( query, { $set })
+
+      if (success) { // should be 1 and idempotent
+        const fields = {
+          "name": 1,
+          "role": 1
+        }
+        const user = User.findOne(query, { fields })
+
+        return user
+      }
+    }
+
+    return payload
   }
 }
 
@@ -69,12 +125,24 @@ export const logUserIn = {
 
 , run(query) {
     query.email = query.email.toLowerCase()
-    const user = User.findOne(query)
+    const fields = {
+      name: 1,
+      role: 1,
+      email_confirmed: 1
+    }
+    const user = User.findOne(query, { fields })
 
     if (user) {
-      return { success: user._id }
+      if (user.email_confirmed) {
+        delete user.email_confirmed // not needed in client
+        return user
+
+      } else {
+        return { message: "Please confirm your email address"}
+      }
+
     } else {
-      return { error: "Invalid email or password"}
+      return { fail: "Invalid email or password"}
     }
   }
 }
