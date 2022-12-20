@@ -31,7 +31,7 @@ class CustomStorage{
 class Storage{
   constructor() {
     /// <<< HARD-CODED
-    this.id = "secure-login"
+    this.id = "jazyx.timetable"
     /// HARD-CODED >>>
 
     this.stored = false // let's be pessimistic
@@ -71,7 +71,7 @@ class Storage{
   }
 
 
-  get(key) {
+  get() {
     return Object.assign({}, this.settings)
   }
 

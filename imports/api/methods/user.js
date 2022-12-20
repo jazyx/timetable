@@ -38,7 +38,7 @@ export const registerUser = {
       return { error: "Missing data", userData }
     }
 
-    email = email.toLowerCase()
+    email = userData.email = email.toLowerCase()
     const query = { email }
     const existingUser = User.findOne(query)
 

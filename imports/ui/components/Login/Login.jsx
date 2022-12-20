@@ -1,6 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { UserContext } from  '/imports/ui/contexts/UserContext.jsx'
+
+import storage from '/imports/api/storage.js'
 
 
 
@@ -10,8 +12,30 @@ import ConfirmEmail from './EmailSent'
 
 
 export const Login = () => {
-  const { idData } = useContext(UserContext) // will be an object
+  const {
+    idData,
+    setIdData
+  } = useContext(UserContext) // idData will be an object
   const { _id, awaiting_confirmation, jwt } = idData
+  const [ renderedOnce, setRenderedOnce ] = useState(false)
+    
+
+  const autoLogin = () => {
+    const idDetails = storage.get()
+
+    console.log("idDetails:", idDetails);
+    console.log("idData:", idData);
+    
+    
+    
+    if (idDetails.remember) {      
+      setIdData(idDetails)
+    }
+    setRenderedOnce(true)
+  }
+  
+
+  useEffect(autoLogin, [])
 
 
   if (_id) {
@@ -23,6 +47,11 @@ export const Login = () => {
     return <ConfirmEmail
       {...idData}
     />
+  }
+
+
+  if (!renderedOnce) {
+    return <></>
   }
 
 

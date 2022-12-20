@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { UserContext } from  '/imports/ui/contexts/UserContext.jsx'
@@ -9,24 +9,36 @@ const {
   logUserIn
 } = methods
 
+import storage from '/imports/api/storage.js'
+
+
+
 import { StyledForm } from './FormStyles'
 
 
 
 export default function Form() {
   const {
+    idData,
     setIdData,
     useLog,
     setUseLog
   } = useContext(UserContext)
   const navigate = useNavigate()
+  
 
   const [ showPassword, setShowPassword ] = useState(false)
-  const [ name, setName ] = useState("James")
-  const [ email, setEmail ] = useState("james@lexogram.com")
-  const [ password, setPassword ] = useState("TIiudhtm1!LE")
+  const [ name, setName ] = useState(idData.name)
+  const [ email, setEmail ] = useState(idData.email)
+  const [ password, setPassword ] = useState(idData.password || "")
   const [ isTeacher, setIsTeacher ] = useState(true)
   const [ logInstead, setLogInstead ] = useState(false)
+
+  const [ remember, setRemember ] = useState(storage.getItem("remember"))
+  const [ autoLogin, setAutoLogin ] = useState(storage.getItem("autoLogin"))
+  
+  console.log("remember:", remember);
+  
 
 
   // Check if any fields are empty ...
@@ -126,16 +138,6 @@ export default function Form() {
   })()
 
 
-  // const navigate = useNavigate()
-
-  // const setMessage = (source, text) => {
-  //   setRegisterMessage({
-  //     source,
-  //     text
-  //   })
-  // }
-
-
   // Editing input fields
   const reset = () => {
     if (logInstead) {
@@ -172,7 +174,20 @@ export default function Form() {
   const sendPasswordLink = (event) => {
     event.preventDefault()
     console.log("TODO: use email to send passwordreset link");
+  }
 
+
+  const toggleRemember = () => {
+    const newValue = !remember
+    setRemember(newValue)
+    storage.setItem("remember", newValue)
+  }
+
+
+  const toggleAutoLogin = () => {
+    const newValue = !autoLogin
+    setAutoLogin(newValue)
+    storage.setItem("autoLogin", newValue)
   }
 
 
@@ -199,11 +214,11 @@ export default function Form() {
 
       const { email, message, error } = response
       if (error) {
-        let { name, email, password } = error.userData
         console.log("error:", error.userData);
-        console.log("THIS SHOULDN'T HAPPEN")
+        alert(`UNEXPECTED ERROR: check console`)
 
       } else if (message) {
+        // email is already regitered
         setLogInstead(true)
 
       } else if (email) { // jwt also in response
@@ -212,6 +227,8 @@ export default function Form() {
         // TODO: set idData to
         // { awaitingConfirmation: true, email }
         setIdData(response)
+
+        storage.set(formData)
       }
     }
 
@@ -220,7 +237,7 @@ export default function Form() {
 
 
   const login = async (event) => {
-    event.preventDefault()
+    event && event.preventDefault()
 
     const callback = (error, data) => {
       if (data) {
@@ -274,7 +291,7 @@ export default function Form() {
             }}
           >
             <span> register</span>
-          </button>:
+          </button>
         </div>
       )
     }
@@ -405,6 +422,54 @@ export default function Form() {
   ))()
 
 
+  const autoLoginButtons = (() => {
+    return (
+      <div
+        className="autologin"
+      > 
+        <label
+          htmlFor="remember"
+        >
+          <input
+            type="checkbox"
+            id="remember"
+            name="remember"
+            checked={remember}
+            onChange={toggleRemember}
+          />
+          <span>Remember password?</span>
+        </label>
+        <label
+          htmlFor="autoLogin"
+        >
+          <input
+            type="checkbox"
+            id="autoLogin"
+            name="autoLogin"
+            checked={remember && autoLogin}
+            onChange={toggleAutoLogin}
+            disabled={!remember}
+          />
+          <span>Log in automatically?</span>
+        </label>
+      </div>
+    )
+  })()
+
+
+  const runAutoLogin = () => {
+    if (idData.autoLogin) {
+      const invalid = document.querySelector(":invalid")
+      if (!invalid) {
+        login()
+      }
+    }
+  }
+
+
+  useEffect(runAutoLogin, [])
+
+
   return (
     <StyledForm>
       <form
@@ -435,7 +500,7 @@ export default function Form() {
             id="email"
             className={invalid.includes("email") ? "invalid" : ""}
             name="email"
-            value={email}
+            defaultValue={email}
             onChange={updateEmail}
           />
         </label>
@@ -459,6 +524,7 @@ export default function Form() {
           {forgotPassword}
         </label>
 
+        {autoLoginButtons}
         {button}
       </form>
     </StyledForm>

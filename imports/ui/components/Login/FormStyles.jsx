@@ -19,13 +19,13 @@ export const StyledForm = styled.div`
   --a-hover:       #fff;
   --green:         #090;
   --red:           #c00;
-  --mask:          #111c;
+  --mask:          #111d;
   --toggle-hover:  #222;
   --toggle-active: #000;
 
   --smaller:       0.6667em;
-  --action-margin: 2em;
-  --errors-height: 5em;
+  --action-margin: 1.5em;
+  --errors-height: 6em;
 
   height: 100vh;
 
@@ -189,6 +189,27 @@ export const StyledForm = styled.div`
     & li:first-child {
       list-style-type: none;
       left: 0;
+    }
+  }
+
+  /* Auto Login */
+  & div.autologin {
+    font-size: var(--smaller);
+    margin-top: 1em;
+
+    & input {
+      width: 1em; 
+      height: 1em;
+      accent-color: var(--green);
+    }
+
+    & input:disabled + span {
+      color: var(--a-color);
+    }
+    
+    & span {
+      display: inline;
+      margin-left: 0.5em;
     }
   }
 
