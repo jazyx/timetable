@@ -4,10 +4,10 @@
  * SessionTracker is called each time a component that uses it is
  * (re-)rendered.
  *
- * For now, this is just Teacher.jsx.
+ * For now, this is just Calendar.jsx.
  *
  * It generates an object containing data that is used by Grid to
- * display a calendar
+ * display a calendar.
  *
  * return {
  *   day_begin:     used by the calling component to calculate
@@ -44,14 +44,14 @@
  * - timeZone   /
  *
  * 1. Finds the appropriate Teacher document, to use:
- *    - teacher_id: to obtain contract records for the teacher
+ *    - teacher_id: to obtain assignment records for the teacher
  *    - day_begin and _end: to calculate rows needed for grid
  *    - language: to determine what language to display the date
  *      headers in the calendar
- * 2. Uses teacher_id to find all the current Contracts for this
+ * 2. Uses teacher_id to find all the current Assignments for this
  *    teacher
- * 3. Uses the array of contract_ids to find all the currently
- *    active Classes for each Contract
+ * 3. Uses the array of assignment_ids to find all the currently
+ *    active Classes for each Assignment
  * 4. Uses the class_ids to find all the Sessions that:
  *    - Are dated within the period between monday and endTime
  *    - Repeat every week at a specific time
@@ -73,7 +73,7 @@ import collections from '/imports/api/collections/'
 
 const {
   Teacher,
-  Contract,
+  Assignment,
   Class,
   Session,
 } = collections
@@ -142,24 +142,24 @@ export const SessionTracker = (props) => {
   } = teacherData
 
 
-  // Get _ids of contracts signed with the current teacher
-  const getContracts = () => {
+  // Get _ids of assignments signed with the current teacher
+  const getAssignments = () => {
     const query = { teacher_id }
     const fields = { _id: 1 }
-    const contracts = Contract.find(query, { fields })
+    const assignments = Assignment.find(query, { fields })
                               .fetch()
-                              .map( contract => contract._id )
-    return contracts
+                              .map( assignment => assignment._id )
+    return assignments
   }
 
 
   const getClasses = () => {
-    const contracts = getContracts() // for current teacher
+    const assignments = getAssignments() // for current teacher
 
-    // Find all classes associated with active contracts,
+    // Find all classes associated with active assignments,
     // starting any time before the end of the period to
     // display, and ending no earlier than the beginning.
-    const contract_id = { $in: contracts }
+    const assignment_id = { $in: assignments }
     const start_date = { $lte: endTime}
     const end_date = [
       { end_date: { $exists: false } },
@@ -168,7 +168,7 @@ export const SessionTracker = (props) => {
     ]
     const query = {
       $and: [
-        { contract_id },
+        { assignment_id },
         { start_date },
         { $or: end_date }
       ]
@@ -234,7 +234,7 @@ export const SessionTracker = (props) => {
 
     function getSessionMap(sessionMap, classDoc) {
       // { "name":            <string>
-      //   "contract_id":     <id string>,
+      //   "assignment_id":     <id string>,
       //   "start_date":      <date string>,
       //   "end_date":        <date or empty string>,
       //   "students":        [<student_id>, ...],

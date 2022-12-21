@@ -36,16 +36,19 @@ a {
 `
 
 export const NavBar = () => {
+  const showLink = (event) => {
+    console.log("event.target.innerText:", event.target.innerText);
+  }
+
 
   return (
     <StyledNav>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/s/school">School</Link></li>
-      <li><Link to="/c/company">Company</Link></li>
-      <li><Link to="/t/James">Teacher</Link></li>
-      <li><Link to="/s/student/teacher">Student</Link></li>
-      <li><Link to="/o/o/James">Observer</Link></li>
-      <li><Link to="/not-found">Not Found</Link></li>
+      <li ><Link to="/">Home</Link></li>
+      <li ><Link to="/n/school/school">School</Link></li>
+      <li ><Link to="/n/teacher/James">Teacher</Link></li>
+      <li ><Link to="/n/student/student/teacher">Student</Link></li>
+      <li ><Link to="/n/observer/Александра/James">Observer</Link></li>
+      <li ><Link to="/not-found">Not Found</Link></li>
     </StyledNav>
   );
 };

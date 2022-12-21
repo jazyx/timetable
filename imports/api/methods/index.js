@@ -4,12 +4,16 @@ import { Meteor } from 'meteor/meteor'
 
 import * as timeZones from './timeZones'
 import * as timeTable from './timeTable'
+import * as accounts  from './accounts'
+import * as user      from './user'
 
 
 
 const methodObjects = {
   ...timeZones,
-  ...timeTable
+  ...timeTable,
+  ...accounts,
+  ...user
 }
 
 

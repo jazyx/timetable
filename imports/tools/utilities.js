@@ -839,6 +839,10 @@ export const getElementIndex = (element, parentTag) => {
  * }
  */
 export const getTimeValues = (timeZone, now = new Date()) => {
+  if (typeof now !== "object") {
+    now = new Date(now)
+  }
+
   // Get the current time in GMT
   // 2022-12-02T21:00:00.000Z ("Europe/Moscow")
 
@@ -906,8 +910,13 @@ export const getTimeValues = (timeZone, now = new Date()) => {
  * } between the two dates
  */
 export const getTimeBetween = (date1, date2) => {
+  if (typeof date1 !== "object") {
+    date1 = new Date(date1)
+  }
   if (!date2) {
     date2 = new Date()
+  } else if (typeof date2 !== "object") {
+    date2 = new Date(date2)
   }
 
   let ms = date2 - date1
@@ -934,6 +943,10 @@ export const getTimeBetween = (date1, date2) => {
  * }
  */
 export const getZoneTime = (dateTime, timeZone) => {
+  if (typeof dateTime !== "object") {
+    dateTime = new Date(dateTime)
+  }
+
   let isoString
   try {
     isoString = dateTime.toLocaleString( "en-GB", { timeZone })
@@ -968,6 +981,10 @@ export const getZoneTime = (dateTime, timeZone) => {
  * GMT, so the time zone may be important.
  */
  export const getMinuteSlot = (dateTime, timeZone) => {
+  if (typeof dateTime !== "object") {
+    dateTime = new Date(dateTime)
+  }
+
   let isoString
   try {
     isoString = dateTime.toLocaleString( "en-GB", { timeZone })
@@ -993,7 +1010,14 @@ export const getZoneTime = (dateTime, timeZone) => {
  * ignored, because the _interval_ between times is important,
  * not the _exact_ time.
  */
- export const getTimeSlot = (beginAt, sessionTime) => {
+  export const getTimeSlot = (beginAt, sessionTime) => {
+  if (typeof beginAt !== "object") {
+    beginAt = new Date(beginAt)
+  }
+  if (typeof sessionTime !== "object") {
+    sessionTime = new Date(sessionTime)
+  }
+
   // Number of complete 5-minute segments after the hour
   const sessionSlot = Math.floor(sessionTime.getMinutes() / 5)
   const sessionHour = sessionTime.getHours()
@@ -1019,6 +1043,10 @@ export const getZoneTime = (dateTime, timeZone) => {
  * automatically be used by default.
  */
 export const getLocalDate = (date, daysLater, timeZone, isoCode) => {
+  if (typeof date !== "object") {
+    date = new Date(date)
+  }
+
   const msLater = daysLater * 24 * 60 * 60 * 1000
   const newDate = new Date(date.getTime() + msLater)
   const options = {
@@ -1052,6 +1080,13 @@ export const getLocalDate = (date, daysLater, timeZone, isoCode) => {
  *             ignored
  */
 export const reschedule = (date, daysLater = 0, timeSource) => {
+  if (typeof date !== "object") {
+    date = new Date(date)
+  }
+  if (typeof timeSource !== "object") {
+    timeSource = new Date(timeSource)
+  }
+
   const msLater = daysLater * 24 * 60 * 60 * 1000
   const rescheduled = new Date(date.getTime() + msLater)
 

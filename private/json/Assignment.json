@@ -2,7 +2,7 @@
   {
     "school_id": "XLtrhwdtXjMRXDAL5",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "gxM6tr7KmTpLKS5ty",
+    "client_id": "gxM6tr7KmTpLKS5ty",
     "name": "Leroy Merlin",
     "pay_rate": 2000,
     "school_colour": "#900",
@@ -14,7 +14,7 @@
   {
     "school_id": "XLtrhwdtXjMRXDAL5",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "vK95JX3XCj27Me5bv",
+    "client_id": "vK95JX3XCj27Me5bv",
     "name": "Coca-Cola",
     "pay_rate": 2000,
     "school_colour": "#900",
@@ -26,7 +26,7 @@
   {
     "school_id": "XLtrhwdtXjMRXDAL5",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "orm9PaGh87JGeuYux",
+    "client_id": "orm9PaGh87JGeuYux",
     "name": "Lactalis",
     "pay_rate": 1667,
     "school_colour": "#900",
@@ -38,7 +38,7 @@
   {
     "school_id": "5S9gfRMzc5WKxTnz3",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "hp9k4EWZKEyrLnyoq",
+    "client_id": "hp9k4EWZKEyrLnyoq",
     "name": "Edulife",
     "pay_rate": 1500,
     "school_colour": "#900",
@@ -50,7 +50,7 @@
   {
     "school_id": "aG7etWLmXCiddgiSb",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "o7r5fmRPGg8Ki7pMK",
+    "client_id": "o7r5fmRPGg8Ki7pMK",
     "name": "Вадим",
     "pay_rate": 2000,
     "school_colour": "#900",
@@ -62,7 +62,7 @@
   {
     "school_id": "aG7etWLmXCiddgiSb",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "NSX5cDXXKhhYPMt2c",
+    "client_id": "NSX5cDXXKhhYPMt2c",
     "name": "Twins",
     "pay_rate": 1250,
     "school_colour": "#900",
@@ -74,7 +74,7 @@
   {
     "school_id": "ZA63AKt6DmJTQy96D",
     "teacher_id": "AiuEdtgtGJXXSZDak",
-    "company_id": "KcCSmcLW3tyedp6P3",
+    "client_id": "KcCSmcLW3tyedp6P3",
     "name": "DCI",
     "pay_rate": 1250,
     "school_colour": "#900",

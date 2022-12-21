@@ -1,7 +1,7 @@
 [
   {
     "name": "Вячеслав Соколов",
-    "contract_id": "Y7mozM8TrAZ6nJ7DX",
+    "assignment_id": "Y7mozM8TrAZ6nJ7DX",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -14,7 +14,7 @@
   },
   {
     "name": "Lactalis",
-    "contract_id": "6dHpTJMSjejzne6XA",
+    "assignment_id": "6dHpTJMSjejzne6XA",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [
@@ -42,7 +42,7 @@
   },
   {
     "name": "Татьяна Корепанова",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -55,7 +55,7 @@
   },
   {
     "name": "Наталья Потамиянос",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -68,7 +68,7 @@
   },
   {
     "name": "Елена Лавонина",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -81,7 +81,7 @@
   },
   {
     "name": "Екатерина Турфина",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -94,7 +94,7 @@
   },
   {
     "name": "Артур Запиров",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -107,7 +107,7 @@
   },
   {
     "name": "Наталья Бирюкова",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -120,7 +120,7 @@
   },
   {
     "name": "Юлия Чинкова",
-    "contract_id": "SiGN6gbJzyXxoukAj",
+    "assignment_id": "SiGN6gbJzyXxoukAj",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -134,7 +134,7 @@
   },
   {
     "name": "Вадим",
-    "contract_id": "xEnpMtTnMpB99gbN8",
+    "assignment_id": "xEnpMtTnMpB99gbN8",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -147,7 +147,7 @@
   },
   {
     "name": "Дима",
-    "contract_id": "uLCYZtQvT45pjoWMA",
+    "assignment_id": "uLCYZtQvT45pjoWMA",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -160,7 +160,7 @@
   },
   {
     "name": "Андрей",
-    "contract_id": "uLCYZtQvT45pjoWMA",
+    "assignment_id": "uLCYZtQvT45pjoWMA",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -173,7 +173,7 @@
   },
   {
     "name": "Алекс",
-    "contract_id": "Db68TSyb2sLcgAr8C",
+    "assignment_id": "Db68TSyb2sLcgAr8C",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -186,7 +186,7 @@
   },
   {
     "name": "E05-A",
-    "contract_id": "MdSSrX99k7TzSx7NL",
+    "assignment_id": "MdSSrX99k7TzSx7NL",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],
@@ -199,7 +199,7 @@
   },
   {
     "name": "E05-B",
-    "contract_id": "MdSSrX99k7TzSx7NL",
+    "assignment_id": "MdSSrX99k7TzSx7NL",
     "start_date": "2022-11-24T21:00:00.000Z",
     "end_date": "",
     "students": [],

@@ -68,6 +68,7 @@ import React, {
   useRef
 } from 'react'
 
+
 import collections from '/imports/api/collections'
 import {
   removeFrom,
@@ -93,15 +94,20 @@ export const TimetableProvider = ({children}) => {
   // in the timezone of the OS. Use placeholder dates
   // setDateValues() useEffect is triggered.
   const [ timeZone, setTimeZone ] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone
-  ) // "Europe/Moscow"
+     Intl && Intl.DateTimeFormat
+  && Intl.DateTimeFormat().resolvedOptions().timeZone
+  || "Europe/London"
+  )
   const [ midnight, setMidnight ] = useState(new Date())
   const [ monday, setMonday ] = useState(new Date())
   const [ weekStart, setWeekStart ] = useState(new Date())
   const [ endTime, setEndTime ] = useState(new Date())
+
   const [ daysToShow, setDaysToShow ] = useState(8)
   const [ hidePast, setHidePast ] = useState(false)
   const [ dragState, setDragState ] = useState("none")
+
+  const [ showPlanner, setShowPlanner ] = useState(true)
 
 
 
@@ -328,6 +334,7 @@ export const TimetableProvider = ({children}) => {
     <TimetableContext.Provider
       value={{
         ready, // set to true when core collections are online
+
         midnight,
         monday,
         endTime,
@@ -346,7 +353,10 @@ export const TimetableProvider = ({children}) => {
         dragEnter,
         dragOver,
         dragEnd,
-        drop
+        drop,
+
+        showPlanner,
+        setShowPlanner
       }}
     >
       {children}

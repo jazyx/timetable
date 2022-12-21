@@ -1,30 +1,18 @@
 [
   {
     "name": "Prolangue",
-    "admin": "",
-    "password": "",
-    "rate": 2000,
     "_id": "XLtrhwdtXjMRXDAL5"
   },
   {
     "name": "Edulife",
-    "admin": "",
-    "password": "",
-    "rate": 2000,
     "_id": "5S9gfRMzc5WKxTnz3"
   },
   {
     "name": "Freelance",
-    "admin": "",
-    "password": "",
-    "rate": 2000,
     "_id": "aG7etWLmXCiddgiSb"
   },
   {
     "name": "DCI",
-    "admin": "",
-    "password": "",
-    "rate": 0,
     "_id": "ZA63AKt6DmJTQy96D"
   }
 ]

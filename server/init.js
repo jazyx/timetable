@@ -12,10 +12,10 @@ const path = require("path");
 // <<< HARD-CODED file location during development
 const localPath = "/Users/james/Documents/Repos/Personal/Timetable/private"
 const exo_collections = {
-  "school_id":   "School",
-  "teacher_id":  "Teacher",
-  "company_id":  "Company",
-  "contract_id": "Contract"
+  "school_id":     "School",
+  "teacher_id":    "Teacher",
+  "client_id":     "Client",
+  "assignment_id": "Assignment"
 }
 const isDevelopment = fs.existsSync(localPath)
 // HARD-CODED >>>
@@ -28,11 +28,11 @@ const privatePath = Assets.absoluteFilePath(knownFile)
 // Insert data from local JSON files into MongoDB
 const sources = [
   "L10n",
-  "School",
-  "Teacher",
-  "Company",
+  // "School",
+  // "Teacher",
+  "Client",
   "Student",
-  "Contract",
+  "Assignment",
   "Session",
   "Class"
 ]
