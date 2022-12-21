@@ -68,14 +68,16 @@ export default function EmailSent({ jwt, email }) {
       return url
     }
 
+
     const pretend = () => {
-      navigate(url())
+      window.location.assign(url(true))
     }
 
 
     const copyURL = () => {
       navigator.clipboard.writeText(url(true))
     }
+
 
     return (
       <>
@@ -84,8 +86,10 @@ export default function EmailSent({ jwt, email }) {
         >
           Pretend
         </button>
+
         <button
           onClick={copyURL}
+          style={navigator.clipboard ? {} : {display: "none"}}
         >
           Copy Confirmation URL to Clipboard
         </button>

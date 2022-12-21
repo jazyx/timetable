@@ -52,7 +52,7 @@ export const StyledForm = styled.div`
     /* Rules for As a teacher/school radio buttons */
     & label {
       margin-top: 0.25em;
-    
+
       & input {
         width: 1em;
         height: 1em;
@@ -198,7 +198,7 @@ export const StyledForm = styled.div`
     margin-top: 1em;
 
     & input {
-      width: 1em; 
+      width: 1em;
       height: 1em;
       accent-color: var(--green);
     }
@@ -206,7 +206,7 @@ export const StyledForm = styled.div`
     & input:disabled + span {
       color: var(--a-color);
     }
-    
+
     & span {
       display: inline;
       margin-left: 0.5em;
@@ -244,5 +244,5 @@ export const StyledForm = styled.div`
     & {
       font-size: 3.75vh;
     }
-  } 
+  }
 `

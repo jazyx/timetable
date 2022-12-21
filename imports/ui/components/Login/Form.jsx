@@ -25,7 +25,7 @@ export default function Form() {
     setUseLog
   } = useContext(UserContext)
   const navigate = useNavigate()
-  
+
 
   const [ showPassword, setShowPassword ] = useState(false)
   const [ name, setName ] = useState(idData.name)
@@ -36,9 +36,7 @@ export default function Form() {
 
   const [ remember, setRemember ] = useState(storage.getItem("remember"))
   const [ autoLogin, setAutoLogin ] = useState(storage.getItem("autoLogin"))
-  
-  console.log("remember:", remember);
-  
+
 
 
   // Check if any fields are empty ...
@@ -218,7 +216,7 @@ export default function Form() {
         alert(`UNEXPECTED ERROR: check console`)
 
       } else if (message) {
-        // email is already regitered
+        // email is already registered
         setLogInstead(true)
 
       } else if (email) { // jwt also in response
@@ -236,7 +234,7 @@ export default function Form() {
   }
 
 
-  const login = async (event) => {
+  const login = (event) => {
     event && event.preventDefault()
 
     const callback = (error, data) => {
@@ -263,6 +261,12 @@ export default function Form() {
     }
 
     logUserIn.call(formData, callback)
+
+    if (remember) {
+      storage.set({ ...idData, email, password })
+    } else {
+      storage.set({})
+    }
   }
 
 
@@ -426,7 +430,7 @@ export default function Form() {
     return (
       <div
         className="autologin"
-      > 
+      >
         <label
           htmlFor="remember"
         >

@@ -18,22 +18,18 @@ export const Login = () => {
   } = useContext(UserContext) // idData will be an object
   const { _id, awaiting_confirmation, jwt } = idData
   const [ renderedOnce, setRenderedOnce ] = useState(false)
-    
+
 
   const autoLogin = () => {
     const idDetails = storage.get()
 
-    console.log("idDetails:", idDetails);
-    console.log("idData:", idData);
-    
-    
-    
-    if (idDetails.remember) {      
+    if (idDetails.remember) {
       setIdData(idDetails)
     }
+
     setRenderedOnce(true)
   }
-  
+
 
   useEffect(autoLogin, [])
 
@@ -49,7 +45,8 @@ export const Login = () => {
     />
   }
 
-
+  // HACK: Render nothing the first time so that useEffect will
+  // be called to set autoLogin details before Form is shown.
   if (!renderedOnce) {
     return <></>
   }

@@ -61,7 +61,12 @@ export const Calendar = (props) => {
   }
 
 
-  const { day_begin, createDated } = props
+  let { day_begin, createDated } = props
+  if (typeof day_begin !== "object") {
+    console.log("Calendar day_begin:", day_begin, typeof day_begin);
+    day_begin = new Date(day_begin)
+  }
+
   useEffect(() => {
     // Tell the TimetableContext when this teacher's week started
     const weekStart = new Date(monday)
