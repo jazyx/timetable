@@ -1,74 +1,53 @@
+// import { Meteor } from 'meteor/meteor'
+import SimpleSchema from 'simpl-schema'
+
 import {
   Teacher,
   School
 } from '../collections/'
 
 
+export const updateOrganizer = {
+  name: "accounts.update"
 
-export const createAccount = (user) => {
-  // _id:      <id string>,
-  // name:     <string>,
-  // email:    <string email>,
-  // password: <string hash>,
-  // role:     <"teacher" | "school">
+, call(organizeData, callback) {
+    const options = {
+      returnStubValue: true
+    , throwStubExceptions: true
+    }
 
-  const { _id, name, role } = user
-
-  switch (role) {
-    case "teacher":
-      return createTeacher( _id, name )
-    case "school":
-      return createSchool( _id, name )
-    default:
-      return { error: `Unknown role: ${role}` }
-  }
-}
-
-
-
-const createTeacher = ( _id, name ) => {
-  // <<< HARD-CODED defaults
-  const rate = 1500
-  const language = "en-GB"
-  const day_begin = new Date()
-  day_begin.setHours(8, 0, 0)
-  const day_end = new Date()
-  day_end.setHours(19, 0, 0)
-  // HARD-CODED >>>
-
-  const profile = {
-    _id,
-    name,
-    language,
-    rate,
-    day_begin,
-    day_end,
-    unavailable: [],
-    inconvenient: []
+    Meteor.apply(this.name, [organizeData], options, callback)
   }
 
-  const result = Teacher.insert(profile)
-  console.log("createTeacher result:", result);
+, validate(organizeData) {
+    // new SimpleSchema({
+    //   name:     { type: String },
+    //   email:    { type: String },
+    //   password: { type: String },
+    //   role:     { type: String }
+    // }).validate(organizeData)
+  }
+
+, run(organizeData) {
+    const { role, _id } = organizeData
+
+    const collection = (() => {
+      if ( _id ) {
+        switch (role) {
+          case "teacher":
+            return Teacher
+          case "school":
+            return School
+        }
+      }
   
-  return result
-}
+      return null // or undefined or whatever
+    })()
 
-
-
-const createSchool = ( _id, name ) => {
-  const profile = {
-    _id,
-    name,
-    address: "",
-    phone_number: "",
-    url: "",
-    staff: [],
-    outstanding_pay: 0,
-    outstanding_invoices: 0
+    if (collection) {
+      const query = { _id }
+      const $set = { setup_complete: true }
+      collection.update(query, { $set })
+    }
   }
-
-  const result = School.insert(profile)
-  console.log("createSchool result:", result);
-  
-  return result
 }

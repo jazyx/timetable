@@ -4,10 +4,10 @@
  * SessionTracker is called each time a component that uses it is
  * (re-)rendered.
  *
- * For now, this is just Teacher.jsx.
+ * For now, this is just Calendar.jsx.
  *
  * It generates an object containing data that is used by Grid to
- * display a calendar
+ * display a calendar.
  *
  * return {
  *   day_begin:     used by the calling component to calculate

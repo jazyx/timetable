@@ -7,7 +7,7 @@ import { useTracker } from 'meteor/react-meteor-data'
 
 import { TimetableContext } from '/imports/ui/contexts/TimetableContext.jsx';
 
-import { SessionTracker } from '../SessionTracker'
+import { SessionTracker } from '/imports/api/trackers/SessionTracker'
 import { Grid } from './Grid'
 
 import methods from '/imports/api/methods/'
