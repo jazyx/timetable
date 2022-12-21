@@ -28,8 +28,8 @@ const privatePath = Assets.absoluteFilePath(knownFile)
 // Insert data from local JSON files into MongoDB
 const sources = [
   "L10n",
-  "School",
-  "Teacher",
+  // "School",
+  // "Teacher",
   "Client",
   "Student",
   "Assignment",

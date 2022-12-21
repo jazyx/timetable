@@ -1,12 +1,16 @@
 // import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 
-import { User } from '../collections/'
+import {
+  User
+} from '../collections/'
+
 import {
   jwt_sign,
   jwt_verify
 } from '../jwt'
 
+import { createAccount } from './accounts'
 
 
 
@@ -94,6 +98,7 @@ export const confirmEmail = {
           "role": 1
         }
         const user = User.findOne(query, { fields })
+        createAccount(user)
 
         return user
       }
